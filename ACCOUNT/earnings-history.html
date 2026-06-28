@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Earnings History - Global Energy</title>
+    <link rel="icon" href="https://globaleneegy.trade/assets/images/favicon.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1e0533 0%, #110a1f 50%, #0a0118 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Container */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Mega Stats Card */
+        .mega-stats {
+            background: linear-gradient(135deg, #108fb9 0%, #0a57b5 50%, #0f5ecc 100%);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 50px rgba(6, 133, 212, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mega-stats::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20px, 20px) scale(1.1); }
+        }
+
+        .mega-label {
+            font-size: 15px;
+            opacity: 0.95;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mega-amount {
+            font-size: 42px;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            letter-spacing: -1px;
+            color: #3B82F6;
+        }
+
+        .mega-subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 8px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .mini-stat {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(20px);
+        }
+
+        .mini-stat-label {
+            font-size: 12px;
+            color: #C4B5FD;
+            margin-bottom: 6px;
+        }
+
+        .mini-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #E9D5FF;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #DBEAFE;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Earning Card */
+        .earning-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(29, 78, 216, 0.1) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .earning-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .earning-card:active::before {
+            left: 100%;
+        }
+
+        .earning-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .earning-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .earning-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3B82F6;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .earning-type {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .type-investment {
+            background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .type-referral {
+            background: linear-gradient(135deg, #EC4899, #F472B6);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .type-bonus {
+            background: linear-gradient(135deg, #F59E0B, #FBBF24);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .earning-description {
+            font-size: 14px;
+            color: #93C5FD;
+            margin-bottom: 8px;
+        }
+
+        .earning-date {
+            font-size: 12px;
+            color: #60A5FA;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #DBEAFE;
+        }
+
+        .empty-text {
+            color: #93C5FD;
+            margin-bottom: 25px;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #8B5CF6, #EC4899);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .primary-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 5, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #0f88cd;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: #0c7bc1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Loading */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e0533 0%, #110a1f 50%, #0a0118 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top-color: #3B82F6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="window.location='/account'">←</button>
+        <div class="header-title">Earnings History</div>
+        <div class="header-icon">💰</div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Mega Stats -->
+        <div class="mega-stats">
+            <div class="mega-label">
+                <span>🎉</span>
+                Total Earnings
+            </div>
+            <div class="mega-amount">$<span id="totalEarnings">0.00</span></div>
+            <div class="mega-subtitle">Keep growing your wealth!</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="mini-stat">
+                <div class="mini-stat-label">Investments</div>
+                <div class="mini-stat-value">$<span id="investmentEarnings">0</span></div>
+            </div>
+            <div class="mini-stat">
+                <div class="mini-stat-label">Referrals</div>
+                <div class="mini-stat-value">$<span id="referralEarnings">0</span></div>
+            </div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="section-title">
+            <span>📊</span>
+            Recent Earnings
+        </div>
+
+        <!-- Earnings -->
+        <div id="earningsList"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">📈</div>
+            <div class="empty-title">No Earnings Yet</div>
+            <div class="empty-text">Start investing or refer friends to earn!</div>
+            <a href="/account" class="primary-btn">Start Investing</a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="/account" class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+        </a>
+        <a href="/transactions" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Transactions</div>
+        </a>
+        <a href="/deposit" class="nav-item">
+            <div class="nav-icon">💎</div>
+            <div class="nav-label">Deposit</div>
+        </a>
+        <a href="https://wa.me/4407858634598" class="nav-item" target="_blank">
+            <div class="nav-icon">💬</div>
+            <div class="nav-label">Support</div>
+        </a>
+    </div>
+
+    <script>
+        const typeIcons = {
+            'investment': '📈',
+            'referral': '👥',
+            'bonus': '🎁'
+        };
+
+        async function loadEarnings() {
+            try {
+                const res = await fetch("/api/earnings-history", { credentials: "include" });
+                
+                if (!res.ok) throw new Error("Failed to load");
+
+                const data = await res.json();
+                const list = document.getElementById("earningsList");
+                const empty = document.getElementById("emptyState");
+                const loader = document.getElementById("loader");
+
+                loader.style.display = "none";
+
+                if (data.earnings.length === 0) {
+                    empty.style.display = "block";
+                    return;
+                }
+
+                list.innerHTML = "";
+
+                let investmentTotal = 0;
+                let referralTotal = 0;
+
+                data.earnings.forEach(e => {
+                    if (e.type === 'investment') investmentTotal += e.amount;
+                    if (e.type === 'referral') referralTotal += e.amount;
+
+                    const typeClass = `type-${e.type}`;
+                    const icon = typeIcons[e.type] || '💵';
+                    const date = new Date(e.created_at).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    list.innerHTML += `
+                        <div class="earning-card">
+                            <div class="earning-header">
+                                <div class="earning-amount">+$${e.amount.toFixed(2)}</div>
+                                <span class="earning-type ${typeClass}">
+                                    ${icon} ${e.type}
+                                </span>
+                            </div>
+                            <div class="earning-description">
+                                ${e.description || 'Earnings from ' + e.type}
+                            </div>
+                            <div class="earning-date">📅 ${date}</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById("totalEarnings").textContent = data.total_earnings.toFixed(2);
+                document.getElementById("investmentEarnings").textContent = investmentTotal.toFixed(0);
+                document.getElementById("referralEarnings").textContent = referralTotal.toFixed(0);
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("emptyState").style.display = "block";
+            }
+        }
+
+        loadEarnings();
+    </script>
+</body>
+</html>

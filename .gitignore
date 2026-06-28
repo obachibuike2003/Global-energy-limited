@@ -1,0 +1,23 @@
+# Database
+instance/
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+
+# SQLite tools (binary)
+sqlite-tools-win-x64-3510200/
+sqlite-tools-win-x64-3510200.zip
+
+# Claude memory
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store

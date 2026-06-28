@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <link href="/assets/img/favicon.png" rel="icon" sizes="32x32"/>
+  <link href="/assets/img/favicon.png" rel="icon" sizes="192x192"/>
+  <meta content="index, follow" name="robots">
+   <meta content="" name="title"/>
+   <meta content="" name="description"/>
+   <meta content="" name="keywords"/>
+   <meta content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no" name="viewport"/>
+   <title>
+    Global Energy Ltd - Login
+   </title>
+   <!-- Bootstrap 4 -->
+ <link rel="stylesheet" href="/login/css/bootstrap.min.css">
+<link rel="stylesheet" href="/login/css/animate.min.css">
+<link rel="stylesheet" href="/login/css/spacing.min.css">
+<link rel="stylesheet" href="/login/css/font-awesome.min.css">
+<link rel="stylesheet" href="/login/css/main.css">
+
+  </meta>
+ </head>
+ <body>
+  <div class="form-wrap">
+   <script language="javascript">
+    function checkform() {
+  if (document.mainform.username.value=='') {
+    alert("Please type your username!");
+    document.mainform.username.focus();
+    return false;
+  }
+  if (document.mainform.password.value=='') {
+    alert("Please type your password!");
+    document.mainform.password.focus();
+    return false;
+  }
+  return true;
+}
+   </script>
+   <br/>
+   <br/>
+   <center>
+    <a href="/">
+     <img src="/login/img/admin-ajax-2.png" style="width:150px;">
+    </a>
+    <br/>
+    <br/>
+    <div class="gtranslate_wrapper">
+    </div>
+    <script>
+     window.gtranslateSettings = {"default_language":"en","detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"inline","float_switcher_open_direction":"bottom"}
+    </script>
+    <script defer="" src="https://cdn.gtranslate.net/widgets/latest/float.js">
+    </script>
+   </center>
+   <form class="login-form" name="mainform" onsubmit="loginUser(event)">
+
+    <input name="form_id" type="hidden" value="17663967894650"/>
+    <input name="form_token" type="hidden" value="defe17d6ce221f9415b4474a98796db0"/>
+    <input name="a" type="hidden" value="do_login"/>
+    <input name="follow" type="hidden" value=""/>
+    <input name="follow_id" type="hidden" value=""/>
+    <div class="form-image">
+     <img src="/login/img/image-form.png" alt="">
+    </div>
+    <div class="form-content">
+     <h2>
+      Log In
+     </h2>
+     <div class="mat-div">
+      <label class="mat-label">
+       Username
+      </label>
+      <input class="mat-input" name="username" type="text" value=""/>
+     </div>
+     <div class="mat-div">
+      <label class="mat-label">
+       Password
+      </label>
+      <input class="mat-input" name="password" type="password"/>
+     </div>
+     <input class="btn gradient_button" type="submit" value="Log In"/>
+     <a href="/signup">
+      Sign Up
+     </a>
+     <br/>
+     <br/>
+     <a href="/forgot-password">
+      Password Reset
+     </a>
+    </div>
+   </form>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script>
+  <script src="/login/libs/wow.min.js">
+  </script>
+  <script src="/login/libs/bootstrap/js/bootstrap.min.js">
+  </script>
+  <script src="/login/js/common.js">
+  </script>
+  <div id="whatsapp-widget">
+   <a href="https://wa.me/+447435043412?text=Hello,%20I%20have%20a%20question%20about%20https%3A%2F%2Frenergy.ltd%2F" target="_blank">
+    <i class="fa fa-whatsapp" style="font-size: 30px">
+    </i>
+   </a>
+  </div>
+  <style>
+   #whatsapp-widget {
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+  z-index: 9999;
+  border-radius: 50px;
+  width: 58px;
+}
+
+  #whatsapp-widget a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #4dc247;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+  }
+  </style>
+
+  <script src="/login/js/jquery.min.js"></script>
+<script src="/login/js/bootstrap.min.js"></script>
+<script src="/login/js/wow.min.js"></script>
+<script src="/login/js/common.js"></script>
+
+  <script>
+function loginUser(e) {
+  e.preventDefault();
+
+  const form = document.forms["mainform"];
+
+  const data = {
+    username: form.username.value,
+    password: form.password.value
+  };
+
+  fetch("/api/login", {   // ✅ RELATIVE PATH (IMPORTANT)
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include", // ✅ allow cookies/session
+    body: JSON.stringify(data)
+  })
+  .then(async res => {
+    const json = await res.json();
+    if (!res.ok) throw json;
+    return json;
+  })
+  .then(res => {
+    // Check if user is admin
+    if (res.is_admin) {
+      // Admin user - redirect to admin dashboard
+      localStorage.setItem("username", res.username);
+      window.location.href = "/admin";
+    } else {
+      // Regular user - redirect to account
+      localStorage.setItem("username", res.username);
+      window.location.href = "/account";
+    }
+  })
+  .catch(err => {
+    alert(err.error || "Server error");
+    console.error(err);
+  });
+}
+</script>
+
+ </body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Transactions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+  --bg:#0b0f1a;
+  --card:#121a2b;
+  --blue:#1f6bff;
+  --text:#e6ebff;
+  --muted:#8fa3c8;
+  --border:#1e2a44;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:Inter,system-ui,sans-serif;
+  background:linear-gradient(180deg,#070b14,#0b1020);
+  color:var(--text);
+}
+
+/* HEADER */
+.header{
+  padding:28px;
+  font-size:26px;
+  font-weight:700;
+}
+
+/* TABLE WRAPPER */
+.table-wrap{
+  margin:28px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:16px;
+  text-align:center;
+  font-size:14px;
+}
+
+th{
+  background:#0f1629;
+  color:var(--muted);
+}
+
+tr{
+  border-bottom:1px solid var(--border);
+}
+
+tr:last-child{border-bottom:none}
+
+/* STATUS */
+.status{
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.pending{
+  background:#2b2f44;
+  color:#ffcc66;
+}
+
+.approved{
+  background:#12341f;
+  color:#4dff88;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+@media (max-width:768px){
+
+  .header{
+    padding:18px;
+    font-size:22px;
+  }
+
+  .table-wrap{
+    margin:16px;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr{
+    display:block;
+    width:100%;
+  }
+
+  thead{
+    display:none;
+  }
+
+  tr{
+    background:#121a2b;
+    margin-bottom:14px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    padding:14px;
+  }
+
+  td{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border:none;
+    font-size:14px;
+  }
+
+  td::before{
+    content:attr(data-label);
+    color:var(--muted);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+
+  .status{
+    font-size:11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">Transactions</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th>Type</th>
+  <th>Asset</th>
+  <th>Amount</th>
+  <th>Status</th>
+  <th>Date</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+  <td data-label="Type">Deposit</td>
+  <td data-label="Asset">USDT</td>
+  <td data-label="Amount">$1,200.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-10</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Investment</td>
+  <td data-label="Asset">USDT</td>
+  <td data-label="Amount">$500.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-11</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Withdrawal</td>
+  <td data-label="Asset">USDT</td>
+  <td data-label="Amount">$300.00</td>
+  <td data-label="Status"><span class="status pending">Pending</span></td>
+  <td data-label="Date">2026-01-12</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Deposit</td>
+  <td data-label="Asset">BTC</td>
+  <td data-label="Amount">$2,450.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-13</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Investment</td>
+  <td data-label="Asset">BTC</td>
+  <td data-label="Amount">$1,000.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-14</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Withdrawal</td>
+  <td data-label="Asset">BTC</td>
+  <td data-label="Amount">$700.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-15</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Deposit</td>
+  <td data-label="Asset">ETH</td>
+  <td data-label="Amount">$850.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-16</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Investment</td>
+  <td data-label="Asset">ETH</td>
+  <td data-label="Amount">$600.00</td>
+  <td data-label="Status"><span class="status pending">Pending</span></td>
+  <td data-label="Date">2026-01-17</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Deposit</td>
+  <td data-label="Asset">BNB</td>
+  <td data-label="Amount">$400.00</td>
+  <td data-label="Status"><span class="status approved">Approved</span></td>
+  <td data-label="Date">2026-01-18</td>
+</tr>
+
+<tr>
+  <td data-label="Type">Withdrawal</td>
+  <td data-label="Asset">BNB</td>
+  <td data-label="Amount">$150.00</td>
+  <td data-label="Status"><span class="status pending">Pending</span></td>
+  <td data-label="Date">2026-01-19</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</body>
+</html>

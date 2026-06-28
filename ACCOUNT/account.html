@@ -1,0 +1,1186 @@
+<!DOCTYPE html><html lang="en" class="hydrated"><head>
+    <meta charset="utf-8"><style data-styles="">ion-icon{visibility:hidden}.hydrated{visibility:inherit}</style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>globaleneegy.trade - User Dashboard</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
+  <link rel="icon" href="https://globaleneegy.trade/assets/images/favicon.png" sizes="32x32">
+<link rel="icon" href="https://globaleneegy.trade/assets/images/favicon.png" sizes="192x192">
+<link rel="stylesheet" href="/account/css/style.css">
+<link rel="stylesheet" href="/account/css/bootstrap.min.css">
+
+
+
+<!-- CSS -->
+<link rel="stylesheet" href="css/calc.css">
+<link rel="stylesheet" href="css/jquery.bxslider.css">
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/jquery.fancybox.css">
+		
+			
+			
+			<style>
+
+                .wallet-icon {
+  width: 35px;
+  height: 35px;
+  margin-right: 12px;
+  border-radius: 50%;
+}
+
+.transactions .item .detail {
+  display: flex;
+  align-items: center;
+}
+
+			.close {
+				font-size:12px;
+				}
+			</style>
+            <style>
+/* Force dark app background */
+html, body {
+  background-color: #0f1115 !important;
+  min-height: 100%;
+}
+
+/* Main app wrapper */
+#appCapsule {
+  background-color: #0f1115 !important;
+  min-height: 100vh;
+}
+
+/* Sections should not be white */
+.section,
+.section.full,
+.section.mt-4 {
+  background: transparent !important;
+}
+
+/* Wallet list spacing fix */
+.transactions {
+  background: transparent !important;
+}
+</style>
+
+<body>
+
+    <!-- loader -->
+    <div id="loader" style="display: none;">
+        <img src="https://globaleneegy.trade/assets/images/preloader.png" width="250px" class="loading-icon">
+    </div>
+    <!-- * loader -->
+    <!-- * loader -->
+
+    <!-- App Header -->
+    <div class="appHeader bg-primary text-light">
+        <div class="left">
+            <a href="#" class="headerButton" data-toggle="modal" data-target="#sidebarPanel">
+                <ion-icon name="menu-outline" role="img" class="md hydrated" aria-label="menu outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">
+            <img src="https://globaleneegy.trade/login/assets/images/logo.png" width="" class="logo">
+        </div>
+        <div class="right">
+            <a href="/edit" class="headerButton">
+                <ion-icon class="icon md hydrated" name="person-outline" role="img" aria-label="person outline"></ion-icon>
+                <span class="badge badge-danger"></span>
+            </a>
+            
+        </div>
+    </div>
+    <!-- * App Header -->
+      
+
+          <!-- App Capsule -->
+    <div id="appCapsule">
+
+
+        <!-- Wallet Card -->
+        <div class="section wallet-card-section pt-1">
+            <div class="wallet-card">
+                <!-- Balance -->
+                <div class="balance">
+                    <div class="left">
+                        <span class="title">Total Balance</span>
+                        <h1 class="total">$<b id="totalBalance">0.00</b></h1>
+                    </div>
+                    <div class="right">
+                        <a href="/deposit" class="button">
+                            <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+                        </a>
+                    </div>
+                </div>
+                <!-- * Balance -->
+                <!-- Wallet Footer -->
+                <div class="wallet-footer">
+                    <div class="item">
+                         <a href="/deposit">
+                        <!--<a href="#" data-toggle="modal" data-target="#deposit">-->
+                            <div class="icon-wrapper bg-warning">
+                                <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+                            </div>
+                            <strong>Deposit</strong>
+                        </a>
+                    </div>
+                    <div class="item">
+                        <a href="#" data-toggle="modal" data-target="#invest">
+                            <div class="icon-wrapper bg-success">
+                                <ion-icon name="swap-vertical" role="img" class="md hydrated" aria-label="swap vertical"></ion-icon>
+                            </div>
+                            <strong>Invest</strong>
+                        </a>
+                    </div>
+                    <!--<div class="item">-->
+                    <!--      <a href="#" data-toggle="modal" data-target="#transfer">-->
+                    <!--        <div class="icon-wrapper">-->
+                    <!--            <ion-icon name="arrow-forward-outline"></ion-icon>-->
+                    <!--        </div>-->
+                    <!--        <strong>Send</strong>-->
+                    <!--    </a>-->
+                    <!--</div>-->
+                    <div class="item">
+                        <a href="#" data-toggle="modal" data-target="#withdraw">
+                            <div class="icon-wrapper bg-danger">
+                                <ion-icon name="arrow-down-outline" role="img" class="md hydrated" aria-label="arrow down outline"></ion-icon>
+                            </div>
+                            <strong>Withdraw</strong>
+                        </a>
+                    </div>
+                    
+                </div>
+                <!-- * Wallet Footer -->
+            </div>
+        </div>
+        <!-- Wallet Card -->
+
+        
+
+
+
+        <!-- Stats -->
+        <div class="section">
+            <div class="section-heading padding">
+                <h2 class="title">Account Summary</h2>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <div class="stat-box">
+                        <div class="title">Total Deposits</div>
+                        <div class="value text-success">$<b id="stat_total_deposits">0.00</b></div>
+                        <small class="text-muted" id="stat_num_deposits">0 transactions</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-box">
+                        <div class="title">Total Withdrawals</div>
+                        <div class="value text-danger">$<b id="stat_total_withdrawals">0.00</b></div>
+                        <small class="text-muted" id="stat_num_withdrawals">0 transactions</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-6">
+                    <div class="stat-box">
+                        <div class="title">Total Invested</div>
+                        <div class="value text-info">$<b id="stat_total_invested">0.00</b></div>
+                        <small class="text-muted" id="stat_num_investments">0 plans</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-box">
+                        <div class="title">Total Transactions</div>
+                        <div class="value"><b id="stat_total_transactions">0</b></div>
+                        <small class="text-muted">All deposits & withdrawals</small>
+                    </div>
+                </div>
+            </div>
+            <style>
+                .stat-box {
+                    background: #0a0a0a;
+                    border-radius: 8px;
+                    padding: 16px;
+                    min-height: 110px;
+                    border-left: 4px solid #00a8f9;
+                }
+                .stat-box .title {
+                    font-size: 12px;
+                    color: #888;
+                    text-transform: uppercase;
+                    margin-bottom: 8px;
+                    font-weight: 600;
+                }
+                .stat-box .value {
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: #fff;
+                    margin-bottom: 6px;
+                }
+                .stat-box .value.text-success {
+                    color: #00ff88;
+                }
+                .stat-box .value.text-danger {
+                    color: #ff6b6b;
+                }
+                .stat-box .value.text-info {
+                    color: #00a8f9;
+                }
+                .stat-box small {
+                    font-size: 11px;
+                    display: block;
+                }
+                .section-heading.padding {
+                    padding: 0 1rem;
+                }
+            </style>
+        </div>
+        <script>
+$(document).ready(function(){
+  $('.carousel-multiple').owlCarousel({
+    loop:true,
+    margin:16,
+    nav:false,
+    dots:true,
+    items:1
+  });
+});
+</script>
+<style>
+    .bill-box {
+  background: linear-gradient(180deg, #111418, #0b0d11);
+  border-radius: 12px;
+  padding: 24px;
+  min-height: 150px;
+}
+
+</style>
+        <!-- * Stats -->
+
+
+
+<script> language="javascript">
+function go(p)
+{
+  document.opts.page.value = p;
+  document.opts.submit();
+}
+</script>
+
+
+
+
+
+
+       
+        
+        
+<!-- My Wallet -->
+<div class="section mt-4">
+  <div class="section-heading">
+    <h2 class="title">My Wallets</h2>
+  </div>
+
+  <div class="transactions">
+
+    <!-- Bitcoin -->
+    <a href="#" class="item">
+      <div class="detail">
+        <img src="/account/img/1000.gif" class="wallet-icon">
+        <div>
+          <strong>Bitcoin Wallet</strong>
+        </div>
+      </div>
+      <div class="right">
+        <div class="price">$ <b id="wallet_btc">0.00</b></div>
+      </div>
+    </a>
+
+    <!-- Ethereum -->
+    <a href="#" class="item">
+      <div class="detail">
+        <img src="/account/img/1001.gif" class="wallet-icon">
+        <div>
+          <strong>Ethereum Wallet</strong>
+        </div>
+      </div>
+      <div class="right">
+        <div class="price">$ <b id="wallet_eth">0.00</b></div>
+      </div>
+    </a>
+
+    <!-- USDT -->
+    <a href="#" class="item">
+      <div class="detail">
+        <img src="/account/img/1002.gif" class="wallet-icon">
+        <div>
+          <strong>USDT (TRC20) Wallet</strong>
+        </div>
+      </div>
+      <div class="right">
+        <div class="price">$ <b id="wallet_usdt">0.00</b></div>
+      </div>
+    </a>
+
+    <!-- BNB -->
+    <a href="#" class="item">
+      <div class="detail">
+        <img src="/account/img/1003.gif" class="wallet-icon">
+        <div>
+          <strong>BNB Wallet</strong>
+        </div>
+      </div>
+      <div class="right">
+        <div class="price">$ <b id="wallet_bnb">0.00</b></div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+                
+            </div>
+        </div> <br>
+               
+            <div class="section full mt-4">
+  <div class="section-heading padding">
+    <h2 class="title">Start Earning Now</h2>
+    <a href="#" class="link">View All</a>
+  </div>
+
+  <div class="row">
+    <div class="col-12 mb-2">
+      <div class="bill-box">
+        <h3>Make Deposit</h3>
+        <p>Fund your account to start earning daily profits.</p>
+      </div>
+    </div>
+
+    <div class="col-12 mb-2">
+      <div class="bill-box">
+        <h3>Invest Funds</h3>
+        <p>Select an investment plan and grow your balance.</p>
+      </div>
+    </div>
+
+    <div class="col-12 mb-2">
+      <div class="bill-box">
+        <h3>Track Progress</h3>
+        <p>Monitor earnings and transaction history in real time.</p>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="bill-box">
+        <h3>Career Opportunity</h3>
+        <p>Earn extra income by sharing your referral link.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+   
+       
+        
+
+                
+   <br>
+<br>
+        
+        
+    
+
+
+ <div class="section-heading padding">
+                <h2 class="title">My Live Trades</h2>
+                <a href="" class="link">View All</a>
+                </div>
+      <!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div id="tradingview_57389"><iframe title="symbol overview TradingView widget" lang="en" id="tradingview_d5958" frameborder="0" allowtransparency="true" scrolling="no" src="https://s.tradingview.com/embed-widget/symbol-overview/?locale=en#%7B%22symbols%22%3A%5B%5B%22COINBASE%3ABTCUSD%7C12m%22%5D%5D%2C%22width%22%3A%22100%25%22%2C%22height%22%3A%22calc(400px%20-%2032px)%22%2C%22colorTheme%22%3A%22light%22%2C%22gridLineColor%22%3A%22%23F0F3FA%22%2C%22fontColor%22%3A%22%23787B86%22%2C%22chartType%22%3A%22area%22%2C%22lineColor%22%3A%22%232196F3%22%2C%22topColor%22%3A%22%23E3F2FD%22%2C%22page-uri%22%3A%22globaleneegy.trade%2F%3Fa%3Daccount%22%2C%22utm_source%22%3A%22globaleneegy.trade%22%2C%22utm_medium%22%3A%22widget_new%22%2C%22utm_campaign%22%3A%22symbol-overview%22%7D" style="margin: 0px !important; padding: 0px !important; width: 100%; height: calc(368px);"></iframe></div>
+  <div class="tradingview-widget-copyright" style="width: 100%;">
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+  new TradingView.MediumWidget(
+  {
+  "symbols": [
+    [
+      "COINBASE:BTCUSD|12m"
+    ]
+  ],
+  "chartOnly": false,
+  "width": "100%",
+  "height": 400,
+  "locale": "en",
+  "colorTheme": "light",
+  "gridLineColor": "#F0F3FA",
+  "trendLineColor": "#2196F3",
+  "fontColor": "#787B86",
+  "underLineColor": "#E3F2FD",
+  "isTransparent": false,
+  "autosize": false,
+  "container_id": "tradingview_57389"
+}
+  );
+  </script>
+</div>
+<!-- TradingView Widget END -->
+      
+
+
+   
+
+   <!-- App Bottom Menu -->
+    <div class="appBottomMenu">
+        <a href="/deposit" class="item">
+            <div class="col">
+                <ion-icon name="file-tray-full-outline" role="img" class="md hydrated" aria-label="file tray full outline"></ion-icon>
+                <strong>Dashboard</strong>
+            </div>
+        </a>
+        <a href="/transactions" class="item">
+            <div class="col">
+                <ion-icon name="list-outline" role="img" class="md hydrated" aria-label="list outline"></ion-icon>
+                <strong>Transactions</strong>
+            </div>
+        </a>
+        <a href="/deposit" class="item">
+            <div class="col">
+                <ion-icon name="apps-outline" role="img" class="md hydrated" aria-label="apps outline"></ion-icon>
+                <strong>Plans</strong>
+            </div>
+        </a>
+        <a href="https://wa.me/message/Y6RRPICAN4YML1?src=qr" target="_blank" class="item">
+            <div class="col">
+                <ion-icon name="chatbubble-ellipses-outline" role="img" class="md hydrated" aria-label="chatbubble ellipses outline"></ion-icon>
+                <strong>Whatsapp Support</strong>
+            </div>
+        </a>
+    </div>
+    <!-- * App Bottom Menu -->
+    
+    <!-- App Sidebar -->
+    <div class="modal fade panelbox panelbox-left" id="sidebarPanel" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <!-- profile box -->
+                    <div class="profileBox pt-2 pb-2">
+                        <div class="image-wrapper">
+                           <a href=""><img src="/images/avatar1.jpg" alt="image" class="imaged  w36"></a>
+                        
+                           </div>
+                        <div class="in">
+                            <strong id="username">User</strong>
+                            <div class="text-muted" id="fullname">—</div>
+                        </div>
+                        <a href="#" class="btn btn-link btn-icon sidebar-close" data-dismiss="modal">
+                            <ion-icon name="close-outline" role="img" class="md hydrated" aria-label="close outline"></ion-icon>
+                        </a>
+                    </div>
+                    <!-- * profile box -->
+                    <!-- balance -->
+                    <div class="sidebar-balance">
+                        <div class="in">
+                        <div class="listview-title"><font color="white"><ion-icon name="pulse-outline" role="img" class="md hydrated" aria-label="pulse outline"></ion-icon> Current IP - 102.90.4.6  
+                        <br><ion-icon name="pulse-outline" role="img" class="md hydrated" aria-label="pulse outline"></ion-icon> Last login - Dec-22-2025 06:36:23 PM</font></div>
+                        </div>
+                       
+                    </div>
+                    <!-- * balance -->
+
+                    <!-- action group -->
+                    <div class="action-group">
+                        <a href="" class="action-button">
+                            <div class="in">
+                                <div class="iconbox">
+                                    <ion-icon name="radio-outline" role="img" class="md hydrated" aria-label="radio outline"></ion-icon>
+                                </div>
+                                Active Plan
+                            </div>
+                        </a>
+                        <a href="/deposit-history" class="action-button">
+                            <div class="in">
+                                <div class="iconbox">
+                                    <ion-icon name="trending-up-outline" role="img" class="md hydrated" aria-label="trending up outline"></ion-icon>
+                                </div>
+                                Deposit History
+                            </div>
+                        </a>
+                        <a href="/withdrawal-history" class="action-button">
+                            <div class="in">
+                                <div class="iconbox">
+                                    <ion-icon name="trending-down-outline" role="img" class="md hydrated" aria-label="trending down outline"></ion-icon>
+                                </div>
+                                Withdraw History
+                            </div>
+                        </a>
+                        <a href="/earnings-history" class="action-button">
+                            <div class="in">
+                                <div class="iconbox">
+                                    <ion-icon name="analytics-outline" role="img" class="md hydrated" aria-label="analytics outline"></ion-icon>
+                                </div>
+                                Earning History
+                            </div>
+                        </a>
+                    </div>
+                    <!-- * action group -->
+
+                    <!-- menu -->
+                    <div class="listview-title mt-1">Menu</div>
+                    <ul class="listview flush transparent no-line image-listview">
+                        <li>
+                            <a href="" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="file-tray-full-outline" role="img" class="md hydrated" aria-label="file tray full outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    Dashboard
+                                   
+                                </div>
+                            </a>
+                        </li>
+                         
+                        <li>
+                            <a href="/referral" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="people-outline" role="img" class="md hydrated" aria-label="people outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    My Referrals
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="school-outline" role="img" class="md hydrated" aria-label="school outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    FAQs
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- * menu -->
+                       
+
+                    <!-- others -->
+                    <div class="listview-title mt-1">Others</div>
+                    <ul class="listview flush transparent no-line image-listview">
+                        <li>
+                            <a href="/edit" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="options-outline" role="img" class="md hydrated" aria-label="options outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    Edit Account
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/4407858634598" target="_blank" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="chatbubbles-outline" role="img" class="md hydrated" aria-label="chatbubbles outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    Chat Support
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="#" onclick="logoutUser()" class="item">
+                                <div class="icon-box bg-primary">
+                                    <ion-icon name="power-outline" role="img" class="md hydrated" aria-label="power outline"></ion-icon>
+                                </div>
+                                <div class="in">
+                                    Log out
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="gtranslate_wrapper gt_container--c8la1f"><!-- GTranslate: https://gtranslate.com --><div id="google_translate_element2"></div><div id="gt_float_wrapper"><div class="gt_float_switcher notranslate" style="opacity: 1;"><div class="gt-selected"><div class="gt-current-lang"><img src="https://cdn.gtranslate.net/flags/svg/en.svg" alt="en"> <span class="gt-lang-code">en</span> <span class="gt_float_switcher-arrow"></span></div></div><div class="gt_options" style="display:none"><a href="#" class="nturl" data-gt-lang="af"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/af.svg" alt="af"> Afrikaans</a><a href="#" class="nturl" data-gt-lang="sq"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sq.svg" alt="sq"> Albanian</a><a href="#" class="nturl" data-gt-lang="am"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/am.svg" alt="am"> Amharic</a><a href="#" class="nturl" data-gt-lang="ar"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ar.svg" alt="ar"> Arabic</a><a href="#" class="nturl" data-gt-lang="hy"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/hy.svg" alt="hy"> Armenian</a><a href="#" class="nturl" data-gt-lang="az"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/az.svg" alt="az"> Azerbaijani</a><a href="#" class="nturl" data-gt-lang="eu"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/eu.svg" alt="eu"> Basque</a><a href="#" class="nturl" data-gt-lang="be"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/be.svg" alt="be"> Belarusian</a><a href="#" class="nturl" data-gt-lang="bn"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/bn.svg" alt="bn"> Bengali</a><a href="#" class="nturl" data-gt-lang="bs"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/bs.svg" alt="bs"> Bosnian</a><a href="#" class="nturl" data-gt-lang="bg"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/bg.svg" alt="bg"> Bulgarian</a><a href="#" class="nturl" data-gt-lang="ca"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ca.svg" alt="ca"> Catalan</a><a href="#" class="nturl" data-gt-lang="ceb"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ceb.svg" alt="ceb"> Cebuano</a><a href="#" class="nturl" data-gt-lang="ny"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ny.svg" alt="ny"> Chichewa</a><a href="#" class="nturl" data-gt-lang="zh-CN"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/zh-CN.svg" alt="zh-CN"> Chinese (Simplified)</a><a href="#" class="nturl" data-gt-lang="zh-TW"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/zh-TW.svg" alt="zh-TW"> Chinese (Traditional)</a><a href="#" class="nturl" data-gt-lang="co"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/co.svg" alt="co"> Corsican</a><a href="#" class="nturl" data-gt-lang="hr"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/hr.svg" alt="hr"> Croatian</a><a href="#" class="nturl" data-gt-lang="cs"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/cs.svg" alt="cs"> Czech</a><a href="#" class="nturl" data-gt-lang="da"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/da.svg" alt="da"> Danish</a><a href="#" class="nturl" data-gt-lang="nl"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/nl.svg" alt="nl"> Dutch</a><a href="#" class="nturl gt-current" data-gt-lang="en"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/en.svg" alt="en"> English</a><a href="#" class="nturl" data-gt-lang="eo"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/eo.svg" alt="eo"> Esperanto</a><a href="#" class="nturl" data-gt-lang="et"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/et.svg" alt="et"> Estonian</a><a href="#" class="nturl" data-gt-lang="tl"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/tl.svg" alt="tl"> Filipino</a><a href="#" class="nturl" data-gt-lang="fi"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/fi.svg" alt="fi"> Finnish</a><a href="#" class="nturl" data-gt-lang="fr"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/fr.svg" alt="fr"> French</a><a href="#" class="nturl" data-gt-lang="fy"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/fy.svg" alt="fy"> Frisian</a><a href="#" class="nturl" data-gt-lang="gl"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/gl.svg" alt="gl"> Galician</a><a href="#" class="nturl" data-gt-lang="ka"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ka.svg" alt="ka"> Georgian</a><a href="#" class="nturl" data-gt-lang="de"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/de.svg" alt="de"> German</a><a href="#" class="nturl" data-gt-lang="el"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/el.svg" alt="el"> Greek</a><a href="#" class="nturl" data-gt-lang="gu"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/gu.svg" alt="gu"> Gujarati</a><a href="#" class="nturl" data-gt-lang="ht"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ht.svg" alt="ht"> Haitian Creole</a><a href="#" class="nturl" data-gt-lang="ha"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ha.svg" alt="ha"> Hausa</a><a href="#" class="nturl" data-gt-lang="haw"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/haw.svg" alt="haw"> Hawaiian</a><a href="#" class="nturl" data-gt-lang="iw"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/iw.svg" alt="iw"> Hebrew</a><a href="#" class="nturl" data-gt-lang="hi"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/hi.svg" alt="hi"> Hindi</a><a href="#" class="nturl" data-gt-lang="hmn"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/hmn.svg" alt="hmn"> Hmong</a><a href="#" class="nturl" data-gt-lang="hu"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/hu.svg" alt="hu"> Hungarian</a><a href="#" class="nturl" data-gt-lang="is"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/is.svg" alt="is"> Icelandic</a><a href="#" class="nturl" data-gt-lang="ig"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ig.svg" alt="ig"> Igbo</a><a href="#" class="nturl" data-gt-lang="id"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/id.svg" alt="id"> Indonesian</a><a href="#" class="nturl" data-gt-lang="ga"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ga.svg" alt="ga"> Irish</a><a href="#" class="nturl" data-gt-lang="it"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/it.svg" alt="it"> Italian</a><a href="#" class="nturl" data-gt-lang="ja"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ja.svg" alt="ja"> Japanese</a><a href="#" class="nturl" data-gt-lang="jw"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/jw.svg" alt="jw"> Javanese</a><a href="#" class="nturl" data-gt-lang="kn"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/kn.svg" alt="kn"> Kannada</a><a href="#" class="nturl" data-gt-lang="kk"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/kk.svg" alt="kk"> Kazakh</a><a href="#" class="nturl" data-gt-lang="km"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/km.svg" alt="km"> Khmer</a><a href="#" class="nturl" data-gt-lang="ko"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ko.svg" alt="ko"> Korean</a><a href="#" class="nturl" data-gt-lang="ku"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ku.svg" alt="ku"> Kurdish (Kurmanji)</a><a href="#" class="nturl" data-gt-lang="ky"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ky.svg" alt="ky"> Kyrgyz</a><a href="#" class="nturl" data-gt-lang="lo"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/lo.svg" alt="lo"> Lao</a><a href="#" class="nturl" data-gt-lang="la"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/la.svg" alt="la"> Latin</a><a href="#" class="nturl" data-gt-lang="lv"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/lv.svg" alt="lv"> Latvian</a><a href="#" class="nturl" data-gt-lang="lt"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/lt.svg" alt="lt"> Lithuanian</a><a href="#" class="nturl" data-gt-lang="lb"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/lb.svg" alt="lb"> Luxembourgish</a><a href="#" class="nturl" data-gt-lang="mk"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/mk.svg" alt="mk"> Macedonian</a><a href="#" class="nturl" data-gt-lang="mg"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/mg.svg" alt="mg"> Malagasy</a><a href="#" class="nturl" data-gt-lang="ms"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ms.svg" alt="ms"> Malay</a><a href="#" class="nturl" data-gt-lang="ml"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ml.svg" alt="ml"> Malayalam</a><a href="#" class="nturl" data-gt-lang="mt"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/mt.svg" alt="mt"> Maltese</a><a href="#" class="nturl" data-gt-lang="mi"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/mi.svg" alt="mi"> Maori</a><a href="#" class="nturl" data-gt-lang="mr"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/mr.svg" alt="mr"> Marathi</a><a href="#" class="nturl" data-gt-lang="mn"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/mn.svg" alt="mn"> Mongolian</a><a href="#" class="nturl" data-gt-lang="my"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/my.svg" alt="my"> Myanmar (Burmese)</a><a href="#" class="nturl" data-gt-lang="ne"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ne.svg" alt="ne"> Nepali</a><a href="#" class="nturl" data-gt-lang="no"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/no.svg" alt="no"> Norwegian</a><a href="#" class="nturl" data-gt-lang="ps"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ps.svg" alt="ps"> Pashto</a><a href="#" class="nturl" data-gt-lang="fa"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/fa.svg" alt="fa"> Persian</a><a href="#" class="nturl" data-gt-lang="pl"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/pl.svg" alt="pl"> Polish</a><a href="#" class="nturl" data-gt-lang="pt"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/pt.svg" alt="pt"> Portuguese</a><a href="#" class="nturl" data-gt-lang="pa"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/pa.svg" alt="pa"> Punjabi</a><a href="#" class="nturl" data-gt-lang="ro"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ro.svg" alt="ro"> Romanian</a><a href="#" class="nturl" data-gt-lang="ru"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ru.svg" alt="ru"> Russian</a><a href="#" class="nturl" data-gt-lang="sm"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sm.svg" alt="sm"> Samoan</a><a href="#" class="nturl" data-gt-lang="gd"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/gd.svg" alt="gd"> Scottish Gaelic</a><a href="#" class="nturl" data-gt-lang="sr"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sr.svg" alt="sr"> Serbian</a><a href="#" class="nturl" data-gt-lang="st"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/st.svg" alt="st"> Sesotho</a><a href="#" class="nturl" data-gt-lang="sn"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sn.svg" alt="sn"> Shona</a><a href="#" class="nturl" data-gt-lang="sd"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sd.svg" alt="sd"> Sindhi</a><a href="#" class="nturl" data-gt-lang="si"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/si.svg" alt="si"> Sinhala</a><a href="#" class="nturl" data-gt-lang="sk"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sk.svg" alt="sk"> Slovak</a><a href="#" class="nturl" data-gt-lang="sl"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sl.svg" alt="sl"> Slovenian</a><a href="#" class="nturl" data-gt-lang="so"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/so.svg" alt="so"> Somali</a><a href="#" class="nturl" data-gt-lang="es"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/es.svg" alt="es"> Spanish</a><a href="#" class="nturl" data-gt-lang="su"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/su.svg" alt="su"> Sundanese</a><a href="#" class="nturl" data-gt-lang="sw"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sw.svg" alt="sw"> Swahili</a><a href="#" class="nturl" data-gt-lang="sv"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/sv.svg" alt="sv"> Swedish</a><a href="#" class="nturl" data-gt-lang="tg"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/tg.svg" alt="tg"> Tajik</a><a href="#" class="nturl" data-gt-lang="ta"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ta.svg" alt="ta"> Tamil</a><a href="#" class="nturl" data-gt-lang="te"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/te.svg" alt="te"> Telugu</a><a href="#" class="nturl" data-gt-lang="th"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/th.svg" alt="th"> Thai</a><a href="#" class="nturl" data-gt-lang="tr"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/tr.svg" alt="tr"> Turkish</a><a href="#" class="nturl" data-gt-lang="uk"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/uk.svg" alt="uk"> Ukrainian</a><a href="#" class="nturl" data-gt-lang="ur"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/ur.svg" alt="ur"> Urdu</a><a href="#" class="nturl" data-gt-lang="uz"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/uz.svg" alt="uz"> Uzbek</a><a href="#" class="nturl" data-gt-lang="vi"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/vi.svg" alt="vi"> Vietnamese</a><a href="#" class="nturl" data-gt-lang="cy"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/cy.svg" alt="cy"> Welsh</a><a href="#" class="nturl" data-gt-lang="xh"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/xh.svg" alt="xh"> Xhosa</a><a href="#" class="nturl" data-gt-lang="yi"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/yi.svg" alt="yi"> Yiddish</a><a href="#" class="nturl" data-gt-lang="yo"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/yo.svg" alt="yo"> Yoruba</a><a href="#" class="nturl" data-gt-lang="zu"><img data-gt-lazy-src="https://cdn.gtranslate.net/flags/svg/zu.svg" alt="zu"> Zulu</a></div></div></div></div>
+<script>window.gtranslateSettings = {"default_language":"en","detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"inline","float_switcher_open_direction":"bottom"}</script>
+<script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer=""></script>
+                        </li>
+                    </ul>
+                    <!-- * others -->
+
+                 
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * App Sidebar --> 
+ 
+
+
+
+
+
+
+        <div class="modal fade action-sheet" id="invest" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Start an Invesment </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                   
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account1">Select Plan</label>
+                                        <select class="form-control custom-select" id="account1" name="h_id" value="">
+                                            <option value="1">BRONZE PLAN (8% ROI After 24 hrs) $50 - $499</option>
+                                            <option value="2">SILVER (16% ROI After 24hrs) $500 - $7,999</option>
+                                            <option value="3">GOLD PLAN (33% ROI After 48hrs) $7,000 - Unlimited</option>
+                                             <!--<option value="4">PLATINUM PLAN (5% ROI Daily) $200,000 - $0.00</option>-->
+                                         <!--     <option value="5">REAL ESTATE PLAN  (5% ROI Weekly) $60,000 - $1,000,000</option>
+                                               <option value="6">STOCKS - CORE INVESTMENT  (fixed % ROI Weekly) $20,000 - $59,999</option>
+                                                <option value="7">STOCKS - BOND INVESTMENT  (fixed % ROI Weekly) $60,000 - $99,999</option>
+                                                 <option value="8">STOCKS - SHARES INVESTMENT  (fixed % ROI Weekly) $100,000 - $1,000,000</option> -->
+                                              
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                 <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account2">Select Wallet</label>
+                                        <select class="form-control custom-select" id="investWallet" name="type">
+                                            
+       
+         <option value="account_1000" id="optBTC">Bitcoin Wallet</option>
+         <option value="account_1001" id="optETH">Ethereum Wallet</option>
+         <option value="account_1002" id="optUSDT">USDT Wallet</option>
+         <option value="account_1003" id="optBNB">BNB Wallet</option>
+       </select>
+
+       <!--<option value="account_1004" >My USDT (BEP20) wallet</option> -->
+         
+                                          
+  
+                </select>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="input2">$</span>
+                                        </div>
+                                        <input type="text" id="investAmount" name="amount" class="form-control form-control-lg">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group basic">
+                                   <button type="button" class="btn btn-primary btn-block btn-lg" onclick="submitInvestment()">Continue</button>
+                                </div>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+          
+
+        <div class="form">
+
+        <div class="modal fade action-sheet" id="transfer" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Send to Another User </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                   
+                               
+
+                                 <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account2">Transfer from</label>
+                                        <select class="form-control custom-select" id="transferWallet" name="ec">
+        <!--<option value="account_1000" >My Bitcoin wallet</option>-->
+        <!-- <option value="account_1001" >My Ethereum wallet</option>-->
+      <!--  <option value="account_999" >My USDT wallet</option> -->
+       <option value="account_1000">My Bitcoin wallet</option>
+         <option value="account_1001">My Ethereum wallet</option>
+        <option value="account_1002">My USDT (TRC20) wallet</option>
+        <option value="account_1003">My BNB wallet</option> 
+       <!--<option value="account_1004" >My USDT (BEP20) wallet</option> -->
+         
+  
+                </select>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="input2">$</span>
+                                        </div>
+                                        <input type="text" value="" name="amount" class="form-control form-control-lg">
+                                    </div>
+                                </div>
+
+   <div class="form-group basic">
+                                    <label class="label">To (username)</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="input2"></span>
+                                        </div>
+                                        <input type="text" name="account" placeholder="" value="" class="form-control form-control-lg">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group basic">
+                                    <label class="label">Description</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="input2"></span>
+                                        </div>
+                                        <input type="text" name="comment" placeholder="" value="" class="form-control form-control-lg">
+                                    </div>
+                                </div>
+                                <div class="form-group basic">
+                                    <button type="submit" class="btn btn-primary btn-block btn-lg">Continue</button>
+                                </div>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+          
+
+        <!-- * Transfer Action Sheet -->
+        
+        
+        
+        
+        <!-- Withdraw Action Sheet -->
+        
+
+
+        <div class="modal fade action-sheet" id="withdraw" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Withdraw Your Funds</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                    
+                                <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="">Account Balance</label>
+                                        
+                                        <h2>$<span id="accountBalance">0.00</span></h2>
+                                        
+                                        
+                                        <br>
+                                        <br>
+                                        <label class="label" for="account2d">From</label>
+                                        <select class="form-control custom-select" id="account2d" name="ec">
+                                          <option value="account_1000">My Bitcoin wallet</option>
+  <option value="account_1001">My Ethereum wallet</option>
+       <option value="account_1002">My USDT (TRC20) wallet</option>
+      <option value="account_1003">My BNB wallet</option>
+     
+                                        </select>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="form-group basic">
+                                    <label class="label">Enter Amount</label>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="input14d">$</span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-lg" placeholder="0" name="amount">
+                                    </div>
+                                </div>
+
+                                <div class="form-group basic">
+                                    <button type="button"class="btn btn-primary btn-block btn-lg"onclick="submitWithdraw()">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- * Withdraw Action Sheet -->
+        
+        
+        
+        
+        
+          <!--Investment Dialog Form -->
+            
+  
+  
+
+<script>
+function openCalculator(id) {
+  const w = 225;
+  const h = 400;
+  const t = (screen.height - h - 30) / 2;
+  const l = (screen.width - w - 30) / 2;
+
+  window.open(
+    '?a=calendar&type=' + id,
+    'calculator' + id,
+    `top=${t},left=${l},width=${w},height=${h}`
+  );
+}
+</script>                            
+        <div class="modal fade action-sheet" id="deposit" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Fund your Account</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="action-sheet-content">
+                           
+                                
+
+                              <div class="form-group basic">
+                                    <div class="input-wrapper">
+                                        <label class="label" for="account2">Payment Processor</label>
+                                <select class="form-control custom-select" id="depositWallet" name="type">
+                                    <option value="process_1000">Deposit using Bitcoin</option>
+                                    <option value="process_1001">Deposit using Ethereum</option>
+                                    <option value="process_1002">Deposit using USDT (TRC20)</option> 
+                                    <option value="process_1003">Deposit using BNB</option> 
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Amount -->
+                        <div class="form-group basic">
+                            <label class="label">Enter Amount</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="number" class="form-control form-control-lg" placeholder="0.00">
+                            </div>
+                        </div>
+
+        <!-- Submit -->
+        <div class="form-group basic"> 
+            <button type="button" class="btn btn-primary btn-block btn-lg">Continue
+          </button>
+        </div>
+
+      
+    </div>
+  </div>
+</div>
+<!-- * Exchange Action Sheet -->
+
+<!-- App Footer -->
+<div class="appFooter">
+  <div class="footer-title">
+    © globaleneegy.trade 2025. All Rights Reserved.
+  </div>
+</div>
+<!-- * App Footer -->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- Popper -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+
+
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+<script src="assets/js/plugins/owl-carousel/owl.carousel.min.js"></script>
+<script src="/account/js/base.js"></script>
+
+<!-- Smartsupp Chat -->
+<script>
+  var _smartsupp = _smartsupp || {};
+  _smartsupp.key = '4fcd1d74767c09ba83e8f5ab9cd65238e10adf65';
+  (function(d) {
+    var s = d.createElement('script');
+    s.src = 'https://www.smartsuppchat.com/loader.js';
+    s.async = true;
+    d.body.appendChild(s);
+  })(document);
+
+  function mapWallet(wallet){
+  if(wallet === "account_1000") return "btc";
+  if(wallet === "account_1001") return "eth";
+  if(wallet === "account_1002") return "usdt";
+  if(wallet === "account_1003") return "bnb";
+}
+function logoutUser() {
+  fetch("/logout", { credentials: "include" })
+    .then(() => {
+      window.location.href = "/login";
+    });
+}
+
+</script>
+<script>
+async function loadDashboard() {
+  let res;
+
+  try {
+    res = await fetch("/dashboard/me", {
+      credentials: "include"
+    });
+  } catch (e) {
+    console.error("Network error", e);
+    return;
+  }
+
+  if (!res || !res.ok) {
+    console.warn("Not authenticated");
+    return; // ❌ DO NOT FORCE REDIRECT
+  }
+
+  const data = await res.json();
+
+  document.getElementById("totalBalance").innerText =
+    data.total_balance.toFixed(2);
+
+  document.getElementById("accountBalance").innerText =
+    data.total_balance.toFixed(2);
+
+  document.getElementById("wallet_btc").innerText = data.wallets.btc.toFixed(2);
+  document.getElementById("wallet_eth").innerText = data.wallets.eth.toFixed(2);
+  document.getElementById("wallet_usdt").innerText = data.wallets.usdt.toFixed(2);
+  document.getElementById("wallet_bnb").innerText = data.wallets.bnb.toFixed(2);
+
+  document.getElementById("username").innerText = data.username;
+  // ✅ ADD THIS PART
+  if (data.referral_code) {
+    document.getElementById("refLink").value =
+      "https://globalenergy.trade/signup?ref=" + data.referral_code;
+  document.getElementById("optBTC").innerText =
+    `Bitcoin Wallet ($${data.wallets.btc.toFixed(2)})`;
+  document.getElementById("optETH").innerText =
+    `Ethereum Wallet ($${data.wallets.eth.toFixed(2)})`;
+  document.getElementById("optUSDT").innerText =
+    `USDT Wallet ($${data.wallets.usdt.toFixed(2)})`;
+  document.getElementById("optBNB").innerText =
+    `BNB Wallet ($${data.wallets.bnb.toFixed(2)})`;
+  } // Added closing brace for the if statement
+}
+
+async function loadUserStats() {
+  try {
+    // Use /dashboard/me which now returns totals and counts
+    const res = await fetch("/dashboard/me", { credentials: "include" });
+    if (!res || !res.ok) return;
+    const data = await res.json();
+
+    const totals = data.totals || {};
+
+    if (document.getElementById("stat_total_deposits")) {
+      document.getElementById("stat_total_deposits").innerText = (totals.total_deposits || 0).toFixed(2);
+      document.getElementById("stat_num_deposits").innerText = `${totals.num_deposits || 0} transaction${(totals.num_deposits || 0) !== 1 ? 's' : ''}`;
+    }
+
+    if (document.getElementById("stat_total_withdrawals")) {
+      document.getElementById("stat_total_withdrawals").innerText = (totals.total_withdrawals || 0).toFixed(2);
+      document.getElementById("stat_num_withdrawals").innerText = `${totals.num_withdrawals || 0} transaction${(totals.num_withdrawals || 0) !== 1 ? 's' : ''}`;
+    }
+
+    if (document.getElementById("stat_total_invested")) {
+      document.getElementById("stat_total_invested").innerText = (totals.total_invested || 0).toFixed(2);
+      document.getElementById("stat_num_investments").innerText = `${totals.num_investments || 0} plan${(totals.num_investments || 0) !== 1 ? 's' : ''}`;
+    }
+
+    if (document.getElementById("stat_total_transactions")) {
+      const allTx = (totals.num_deposits || 0) + (totals.num_withdrawals || 0);
+      document.getElementById("stat_total_transactions").innerText = allTx;
+    }
+
+  } catch (error) {
+    console.error("Error loading user stats:", error);
+  }
+}
+
+loadDashboard();
+loadUserStats();
+
+
+
+</script>
+<script>
+// Cryptocurrency conversion rates (fetched from live API)
+let cryptoPrices = {
+  btc: 42000,  // Fallback
+  eth: 2400,
+  usdt: 1,
+  bnb: 650
+};
+
+// Fetch live crypto rates on page load
+async function loadCryptoRates() {
+  try {
+    const res = await fetch("/api/crypto-rates");
+    if (res.ok) {
+      cryptoPrices = await res.json();
+    }
+  } catch (e) {
+    console.warn("Could not fetch live rates, using fallback");
+  }
+}
+
+async function submitInvestment() {
+  const btn = document.querySelector('#invest .btn-primary');
+  if (btn) {
+    btn.disabled = true;
+    const origText = btn.innerText;
+    btn.innerText = 'Processing...';
+  }
+
+  const plan = document.getElementById("account1").value;
+  const walletRaw = document.getElementById("investWallet").value;
+  const crypto = mapWallet(walletRaw);
+  const amountUSD = parseFloat(document.getElementById("investAmount").value);
+
+  if (!crypto) {
+    alert("Wallet error");
+    if (btn) { btn.disabled = false; btn.innerText = origText; }
+    return;
+  }
+
+  if (!amountUSD || amountUSD <= 0) {
+    alert("Enter a valid amount");
+    if (btn) { btn.disabled = false; btn.innerText = origText; }
+    return;
+  }
+
+  // Show estimated amount (actual rate will be calculated on backend with live rates)
+  const estimatedCryptoAmount = amountUSD / (cryptoPrices[crypto] || 1);
+
+  let res;
+  try {
+    res = await fetch("/api/invest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        plan_id: plan,
+        amount_usd: amountUSD,
+        crypto: crypto,
+        crypto_amount: parseFloat(estimatedCryptoAmount.toFixed(8))
+      })
+    });
+  } catch (err) {
+    console.error('Network error when calling /api/invest', err);
+    alert('Network error. Please try again.');
+    if (btn) { btn.disabled = false; btn.innerText = origText; }
+    return;
+  }
+
+  // Parse JSON safely; if server returns HTML or non-JSON, show the text
+  let data;
+  try {
+    data = await res.json();
+  } catch (err) {
+    const text = await res.text();
+    console.error('Non-JSON response from /api/invest:', text);
+    alert('Server error: ' + (text || 'Unexpected response'));
+    if (btn) { btn.disabled = false; btn.innerText = origText; }
+    return;
+  }
+
+  if (!res.ok) {
+    const message = data.error || data.message || "Investment failed";
+    // show more details if available
+    if (data.current_balance !== undefined) {
+      alert(`${message}\nCurrent balance: $${data.current_balance}\nRequired: $${data.required}`);
+    } else {
+      alert(message);
+    }
+    if (btn) { btn.disabled = false; btn.innerText = origText; }
+    return;
+  }
+
+  const actualAmount = data.amount_deducted || estimatedCryptoAmount;
+  const rateUsed = data.rate_used || cryptoPrices[crypto];
+  alert(`Investment submitted!\n\n$${amountUSD} USD = ${actualAmount.toFixed(8)} ${crypto.toUpperCase()}\nRate: $${rateUsed.toLocaleString(undefined, {maximumFractionDigits: 2})} per ${crypto.toUpperCase()}`);
+  location.reload();
+}
+
+// Call this when the investment modal opens
+document.addEventListener('DOMContentLoaded', function() {
+  loadCryptoRates();
+});
+
+</script>
+<script>
+async function submitWithdraw() {
+  const walletRaw = document.getElementById("account2d").value;
+  const crypto = mapWallet(walletRaw);
+  const amountInput = document.querySelector('#withdraw input[name="amount"]');
+  const amount = parseFloat(amountInput.value);
+
+  // Validate crypto
+  if (!crypto) {
+    alert("Please select a valid wallet");
+    return;
+  }
+
+  // Validate amount
+  if (!amount || isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid amount");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/withdraw", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ crypto, amount })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Withdrawal failed");
+      return;
+    }
+
+    alert("Withdrawal request submitted successfully!");
+    
+    // Close modal and reload
+    $('#withdraw').modal('hide');
+    location.reload();
+    
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Network error. Please try again.");
+  }
+}
+</script>
+
+
+</body>
+</html>

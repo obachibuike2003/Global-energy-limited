@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Referrals</title>
+<link rel="stylesheet" href="/account/css/bootstrap.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  background: #0a0e14;
+  color: #e4e7eb;
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.container { width: 100%; max-width: 100%; margin: 0 auto; }
+h2 { font-size: 24px; font-weight: 600; margin-bottom: 20px; color: #ffffff; }
+.card { background: #1a1d24; border: 1px solid #2a2f3a; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
+.referral-link-container { display: flex; gap: 12px; align-items: center; }
+.referral-link-container input { flex: 1; background: #0f1318; border: 1px solid #2a2f3a; color: #ffffff; padding: 10px 14px; border-radius: 6px; font-size: 14px; }
+.copy-btn { background: #3a7bd5; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 600; color: #8891a0; text-transform: uppercase; border-bottom: 2px solid #2a2f3a; }
+td { padding: 16px; border-bottom: 1px solid #1a1f28; font-size: 14px; color: #e4e7eb; }
+tr:last-child td { border-bottom: none; }
+.ref-card { background: #0f1318; border: 1px solid #2a2f3a; padding: 14px; border-radius: 10px; margin-bottom: 12px; }
+.ref-card strong { color: #fff; font-size: 15px; display: block; }
+.ref-card span { display: block; font-size: 13px; color: #8891a0; margin-top: 4px; }
+
+#mobileRefList { min-height: 0; }
+
+/* Desktop: show table, hide mobile list */
+#refTable { display: table !important; }
+#mobileRefList { display: none !important; }
+
+/* Mobile: hide table, show mobile list */
+@media (max-width: 768px) {
+  #refTable { display: none !important; }
+  #mobileRefList { display: block !important; }
+  .referral-link-container { flex-direction: column; }
+  .copy-btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>My Referral Link</h2>
+
+  <div class="card">
+    <div class="referral-link-container">
+      <input type="text" id="refLink" readonly>
+      <button class="copy-btn" onclick="copyLink()">Copy</button>
+    </div>
+  </div>
+
+  <h2>People You Referred</h2>
+
+  <div class="card">
+    <table id="refTable">
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Date Joined</th>
+      </tr>
+    </table>
+    <div id="mobileRefList"></div>
+  </div>
+</div>
+
+
+<script>
+async function loadReferrals() {
+  try {
+    const res = await fetch("/api/referrals", { credentials: "include" });
+    const data = await res.json();
+
+    if (!res.ok) {
+      window.location.href = "/login";
+      return;
+    }
+
+    // This ensures the link uses the current domain + the username (referral_code)
+    const currentDomain = window.location.origin;
+    const personalLink = `${currentDomain}/signup?ref=${data.referral_link.split('ref=')[1]}`;
+    document.getElementById("refLink").value = personalLink;
+
+    // Display total referral earnings if available
+    if (data.total_referral_earnings !== undefined) {
+      const earningsDiv = document.querySelector(".referral-earnings") || document.createElement("div");
+      earningsDiv.className = "referral-earnings";
+      earningsDiv.innerHTML = `<h3>Total Referral Earnings: $${(data.total_referral_earnings || 0).toFixed(2)}</h3>`;
+      const refLinkContainer = document.querySelector(".referral-link-container");
+      if (refLinkContainer && !document.querySelector(".referral-earnings")) {
+        refLinkContainer.parentNode.insertBefore(earningsDiv, refLinkContainer.nextSibling);
+      }
+    }
+
+    const table = document.getElementById("refTable");
+    const mobileList = document.getElementById("mobileRefList");
+
+    // Clear list before adding
+    mobileList.innerHTML = "";
+
+    data.referrals.forEach(u => {
+      // Desktop table - Check if table exists first
+      if (table) {
+        const row = table.insertRow(-1);
+        row.innerHTML = `
+          <td>${u.username}</td>
+          <td>${u.email}</td>
+          <td>${u.date}</td>
+        `;
+      }
+
+      // Mobile cards
+      const card = document.createElement("div");
+      card.className = "ref-card";
+      card.innerHTML = `
+        <strong>${u.username}</strong>
+        <span>Email: ${u.email}</span>
+        <span>Joined: ${u.date}</span>
+      `;
+      mobileList.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Error loading referrals:", err);
+  }
+}
+function copyLink() {
+  const linkInput = document.getElementById("refLink");
+  linkInput.select();
+  linkInput.setSelectionRange(0, 99999); // For mobile devices
+  document.execCommand("copy");
+  alert("Referral link copied to clipboard!");
+}
+
+loadReferrals();
+
+</script>
+
+</body>
+</html>

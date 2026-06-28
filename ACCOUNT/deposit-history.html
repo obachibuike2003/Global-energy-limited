@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Deposit History - Global Energy</title>
+    <link rel="icon" href="https://globaleneegy.trade/assets/images/favicon.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1e0533 0%, #110a1f 50%, #0a0118 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Container */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Mega Stats Card */
+        .mega-stats {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 50%, #93C5FD 100%);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mega-stats::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-20px, 20px) scale(1.1); }
+        }
+
+        .mega-label {
+            font-size: 15px;
+            opacity: 0.95;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mega-amount {
+            font-size: 42px;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            letter-spacing: -1px;
+        }
+
+        .mega-subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 8px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .mini-stat {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(96, 165, 250, 0.15) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            backdrop-filter: blur(20px);
+        }
+
+        .mini-stat-label {
+            font-size: 12px;
+            color: #BFDBFE;
+            margin-bottom: 6px;
+        }
+
+        .mini-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #DBEAFE;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #DBEAFE;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Deposit Card */
+        .deposit-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(96, 165, 250, 0.1) 100%);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deposit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .deposit-card:active::before {
+            left: 100%;
+        }
+
+        .deposit-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .deposit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .deposit-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #60A5FA;
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+        }
+
+        .deposit-crypto {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .crypto-btc {
+            background: linear-gradient(135deg, #F7931A, #FFB347);
+            box-shadow: 0 4px 15px rgba(247, 147, 26, 0.4);
+        }
+
+        .crypto-eth {
+            background: linear-gradient(135deg, #627EEA, #8FA8F3);
+            box-shadow: 0 4px 15px rgba(98, 126, 234, 0.4);
+        }
+
+        .crypto-usdt {
+            background: linear-gradient(135deg, #26A17B, #50C878);
+            box-shadow: 0 4px 15px rgba(38, 161, 123, 0.4);
+        }
+
+        .crypto-bnb {
+            background: linear-gradient(135deg, #502ff3, #25187a);
+            box-shadow: 0 4px 15px rgba(9, 126, 214, 0.4);
+        }
+
+        .deposit-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-pending {
+            background: rgba(96, 165, 250, 0.2);
+            color: #60A5FA;
+            border: 1px solid #60A5FA;
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            border: 1px solid #10B981;
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+            border: 1px solid #EF4444;
+        }
+
+        .deposit-tx {
+            font-size: 12px;
+            color: #BFDBFE;
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+
+        .deposit-date {
+            font-size: 12px;
+            color: #60A5FA;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #3B82F6, #60A5FA);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #DBEAFE;
+        }
+
+        .empty-text {
+            color: #BFDBFE;
+            margin-bottom: 25px;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #1E3A8A, #1E40AF);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .primary-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 5, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(30, 58, 138, 0.3);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #60A5FA;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: #3B82F6;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Loading */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e0533 0%, #110a1f 50%, #0a0118 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top-color: #3B82F6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="window.location='/account'">←</button>
+        <div class="header-title">Deposit History</div>
+        <div class="header-icon">💳</div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Mega Stats -->
+        <div class="mega-stats">
+            <div class="mega-label">
+                <span>💰</span>
+                Total Deposited
+            </div>
+            <div class="mega-amount">$<span id="totalDeposited">0.00</span></div>
+            <div class="mega-subtitle">Your investment journey starts here!</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="mini-stat">
+                <div class="mini-stat-label">Approved</div>
+                <div class="mini-stat-value"><span id="approvedCount">0</span></div>
+            </div>
+            <div class="mini-stat">
+                <div class="mini-stat-label">Pending</div>
+                <div class="mini-stat-value"><span id="pendingCount">0</span></div>
+            </div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="section-title">
+            <span>📋</span>
+            Transaction History
+        </div>
+
+        <!-- Deposits -->
+        <div id="depositsList"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">💸</div>
+            <div class="empty-title">No Deposits Yet</div>
+            <div class="empty-text">Start your investment journey by making your first deposit!</div>
+            <a href="/deposit" class="primary-btn">Make a Deposit</a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="/account" class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+        </a>
+        <a href="/transactions" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Transactions</div>
+        </a>
+        <a href="/deposit" class="nav-item active">
+            <div class="nav-icon">💎</div>
+            <div class="nav-label">Deposit</div>
+        </a>
+        <a href="https://wa.me/4407858634598" class="nav-item" target="_blank">
+            <div class="nav-icon">💬</div>
+            <div class="nav-label">Support</div>
+        </a>
+    </div>
+
+    <script>
+        const cryptoIcons = {
+            'btc': '₿',
+            'eth': 'Ξ',
+            'usdt': '₮',
+            'bnb': 'B'
+        };
+
+        async function loadDeposits() {
+            try {
+                const res = await fetch("/api/deposit-history", { credentials: "include" });
+                
+                if (!res.ok) throw new Error("Failed to load");
+
+                const data = await res.json();
+                const list = document.getElementById("depositsList");
+                const empty = document.getElementById("emptyState");
+                const loader = document.getElementById("loader");
+
+                loader.style.display = "none";
+
+                if (data.deposits.length === 0) {
+                    empty.style.display = "block";
+                    return;
+                }
+
+                list.innerHTML = "";
+
+                let totalDeposited = 0;
+                let approvedCount = 0;
+                let pendingCount = 0;
+
+                data.deposits.forEach(d => {
+                    if (d.status === 'approved') {
+                        totalDeposited += d.amount;
+                        approvedCount++;
+                    } else if (d.status === 'pending') {
+                        pendingCount++;
+                    }
+
+                    const cryptoClass = `crypto-${d.crypto}`;
+                    const statusClass = `status-${d.status}`;
+                    const icon = cryptoIcons[d.crypto] || '💵';
+                    const date = new Date(d.created_at).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    const txDisplay = d.tx_hash 
+                        ? `<div class="deposit-tx">🔗 TX: ${d.tx_hash.substring(0, 20)}...</div>`
+                        : '';
+
+                    list.innerHTML += `
+                        <div class="deposit-card">
+                            <div class="deposit-header">
+                                <div class="deposit-amount">$${d.amount.toFixed(2)}</div>
+                                <span class="deposit-crypto ${cryptoClass}">
+                                    ${icon} ${d.crypto.toUpperCase()}
+                                </span>
+                            </div>
+                            <div class="deposit-status">
+                                <span class="status-badge ${statusClass}">
+                                    ${d.status === 'approved' ? '✓' : d.status === 'pending' ? '⏳' : '✗'} 
+                                    ${d.status.toUpperCase()}
+                                </span>
+                            </div>
+                            ${txDisplay}
+                            <div class="deposit-date">📅 ${date}</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById("totalDeposited").textContent = totalDeposited.toFixed(2);
+                document.getElementById("approvedCount").textContent = approvedCount;
+                document.getElementById("pendingCount").textContent = pendingCount;
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("emptyState").style.display = "block";
+            }
+        }
+
+        loadDeposits();
+    </script>
+</body>
+</html>

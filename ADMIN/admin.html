@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Neuro Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+  --bg:#050913;
+  --card:#0c172d;
+  --glass:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.1);
+  --blue:#4c7cff;
+  --text:#eaf1ff;
+  --muted:#8da0c6;
+  --success:#00ffa6;
+  --danger:#ff4d4d;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Inter,system-ui,sans-serif;
+  background:radial-gradient(circle at top,#0a1430,#050913);
+  color:var(--text);
+}
+
+.wrapper{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  background:#050913;
+  border-right:1px solid var(--border);
+  padding:20px;
+}
+.brand{
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:20px;
+}
+.nav a{
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  color:white;
+  text-decoration:none;
+}
+.nav a:hover{background:var(--glass)}
+
+/* Main */
+.main{padding:25px}
+
+/* Header */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.logout{
+  background:var(--danger);
+  border:none;
+  padding:10px 16px;
+  border-radius:10px;
+  color:white;
+  cursor:pointer;
+}
+
+/* Stats */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+  margin-bottom:20px;
+}
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+}
+.stat-title{color:var(--muted)}
+.stat-value{font-size:26px;font-weight:700}
+
+/* Cards */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:20px;
+}
+
+/* Tables */
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;font-size:13px}
+th{color:var(--muted);border-bottom:1px solid var(--border)}
+tr:hover{background:var(--glass)}
+.btn{
+  padding:6px 10px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  background:var(--blue);
+  color:white;
+}
+.btn.success{background:var(--success);color:black}
+
+/* Mobile */
+@media(max-width:900px){
+  .wrapper{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+}
+
+/* Make table scrollable on mobile */
+table {
+  min-width: 600px; /* Forces scroll */
+}
+
+/* Mobile improvements */
+@media(max-width: 768px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .btn {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  th, td {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+td {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Modal */
+#balanceModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000000aa;
+  z-index:9999;
+}
+.btn.delete { background: #8b0000; color: white; }
+#balanceModal .box{
+  background:#0c172d;
+  padding:20px;
+  width:320px;
+  margin:100px auto;
+  border-radius:12px;
+}
+.btn.danger{
+  background:#ff4d4d;
+  color:white;
+}
+
+/* Mobile cards full width */
+@media(max-width:768px){
+  table{
+    min-width:100% !important; /* stop forced scroll */
+  }
+}
+
+#balanceModal input,#balanceModal select{
+  width:100%;
+  padding:8px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="brand">🧠 ACHOR KAKA Admin</div>
+  <nav class="nav">
+    <a>Dashboard</a>
+    <a>Users</a>
+    <a>Investments</a>
+    <a>Withdrawals</a>
+    <a href="/logout">Logout</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<div class="header">
+  <h1>Admin Dashboard</h1>
+  <button class="logout" onclick="location.href='/admin/logout'">Logout</button>
+</div>
+<div class="card">
+  <h3>Platform Stats Chart</h3>
+  <canvas id="adminChart" height="120"></canvas>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-title">Total Users</div>
+    <div class="stat-value" id="totalUsers">0</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-title">Total Balance</div>
+    <div class="stat-value">$<span id="totalBalance">0</span></div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-title">Pending Withdrawals</div>
+    <div class="stat-value" style="color:var(--danger)" id="pendingWithdraws">0</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-title">Pending Investments</div>
+    <div class="stat-value" style="color:var(--success)" id="pendingInvestments">0</div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Users</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>BTC</th>
+          <th>ETH</th>
+          <th>USDT</th>
+          <th>BNB</th>
+          <th>Referred By</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="usersTable"></tbody>
+    </table>
+  </div>
+
+</div>
+
+
+<!-- INVESTMENTS -->
+<div class="card">
+  <h3>Pending Investments</h3>
+  <table>
+    <thead>
+      <tr><th>User</th><th>Plan</th><th>Amount</th><th>Action</th></tr>
+    </thead>
+    <tbody id="investTable"></tbody>
+  </table>
+</div>
+ 
+<!-- DEPOSITS -->
+<div class="card">
+  <h3>Pending Deposits</h3>
+  <table>
+    <thead>
+      <tr><th>User</th><th>Amount</th><th>Coin</th><th>TX</th><th>Action</th></tr>
+    </thead>
+    <tbody id="depositTable"></tbody>
+  </table>
+</div>
+
+<!-- WITHDRAWALS -->
+<div class="card">
+  <h3>Pending Withdrawals</h3>
+  <table>
+    <thead>
+      <tr><th>User</th><th>Coin</th><th>Amount</th><th>Action</th></tr>
+    </thead>
+    <tbody id="withdrawTable"></tbody>
+  </table>
+</div>
+
+</main>
+</div>
+
+<!-- BALANCE MODAL -->
+<div id="balanceModal">
+  <div class="box">
+    <h3>Edit User Balance</h3>
+
+    <input id="editUserId" hidden>
+
+    <label>Coin</label>
+    <select id="editCoin">
+      <option value="usdt">USDT</option>
+      <option value="btc">BTC</option>
+      <option value="eth">ETH</option>
+      <option value="bnb">BNB</option>
+    </select>
+
+    <label>Amount</label>
+    <input type="number" id="editAmount">
+
+    <button class="btn success" onclick="addBalance()">Add Balance</button>
+    <button class="btn" onclick="closeBalanceModal()">Cancel</button>
+  </div>
+</div>
+<div id="removeModal" style="display:none;position:fixed;inset:0;background:#000000aa;z-index:9999;">
+  <div class="box">
+    <h3>Remove User Balance</h3>
+
+    <input id="removeUserId" hidden>
+
+    <label>Coin</label>
+    <select id="removeCoin">
+      <option value="usdt">USDT</option>
+      <option value="btc">BTC</option>
+      <option value="eth">ETH</option>
+      <option value="bnb">BNB</option>
+    </select>
+
+    <label>Amount</label>
+    <input type="number" id="removeAmount">
+
+    <button class="btn danger" onclick="removeBalance()">Remove Balance</button>
+    <button class="btn" onclick="closeRemoveModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- INVESTMENT PROFIT MODAL -->
+<div id="profitModal" style="display:none;position:fixed;inset:0;background:#000000aa;z-index:9999;">
+  <div class="box">
+    <h3>Send Investment Profit</h3>
+
+    <input id="profitUserId" hidden>
+    <input id="profitInvestId" hidden>
+
+    <label>Profit Amount ($)</label>
+    <input type="number" id="profitAmount" placeholder="e.g., 100" step="0.01">
+
+    <label>Crypto Type</label>
+    <select id="profitCrypto">
+      <option value="usdt">USDT</option>
+      <option value="btc">BTC</option>
+      <option value="eth">ETH</option>
+      <option value="bnb">BNB</option>
+    </select>
+
+    <button class="btn success" onclick="sendInvestmentProfit()">Send Profit & Email</button>
+    <button class="btn" onclick="closeProfitModal()">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ================= USERS =================
+
+async function loadUsers(){
+  const res = await fetch("/admin/api/users", { credentials:"include" });
+  const data = await res.json();
+
+  document.getElementById("totalUsers").innerText = data.length;
+
+  let totalBalance = 0;
+  const tbody = document.getElementById("usersTable");
+  tbody.innerHTML = "";
+
+  data.forEach(u=>{
+    totalBalance += (u.usdt || 0);
+
+  if(window.innerWidth < 768){
+      tbody.innerHTML += `
+      <tr>
+        <td colspan="7">
+          <div style="padding:12px;border:1px solid #222;border-radius:12px;margin-bottom:10px;background:#0c172d;">
+            <b>${u.username}</b><br>
+            BTC: ${u.btc} | ETH: ${u.eth}<br>
+            USDT: $${u.usdt} | BNB: ${u.bnb}<br>
+            Referred By: ${u.referred_by || 'N/A'}<br><br>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+              <button class="btn" onclick="openBalanceModal(${u.id})">➕ Add</button>
+              <button class="btn danger" onclick="openRemoveModal(${u.id})">➖ Remove</button>
+              <button class="btn" style="background:${u.withdrawal_frozen ? '#00ffa6' : '#ff8800'};color:${u.withdrawal_frozen ? 'black' : 'white'}" 
+                onclick="${u.withdrawal_frozen ? `unfreezeWithdrawal(${u.id})` : `freezeWithdrawal(${u.id})`}">
+                ${u.withdrawal_frozen ? '✅ Unfreeze' : '🔒 Freeze'}
+              </button>
+              <button class="btn delete" onclick="deleteUser(${u.id}, '${u.username}')">🗑 Delete</button>
+            </div>
+          </div>
+        </td>
+      </tr>`;
+      return;
+    }
+
+    // ✅ DESKTOP TABLE VIEW
+    tbody.innerHTML += `
+      <tr>
+        <td>${u.username}</td>
+        <td>${u.btc}</td>
+        <td>${u.eth}</td>
+        <td>$${u.usdt}</td>
+        <td>${u.bnb}</td>
+        <td>${u.referred_by || 'N/A'}</td>
+        <td>
+          <button class="btn" onclick="openBalanceModal(${u.id})">Add</button>
+         <button class="btn danger" onclick="openRemoveModal(${u.id})">Remove</button>
+        <button class="btn" style="background:${u.withdrawal_frozen ? '#00ffa6' : '#ff8800'};color:${u.withdrawal_frozen ? 'black' : 'white'}" 
+        onclick="${u.withdrawal_frozen ? `unfreezeWithdrawal(${u.id})` : `freezeWithdrawal(${u.id})`}">
+         ${u.withdrawal_frozen ? '✅ Unfreeze' : '🔒 Freeze'}
+       </button>
+       <button class="btn delete" onclick="deleteUser(${u.id}, '${u.username}')">🗑 Delete</button>
+       </td>
+      </tr>`;
+  });
+
+  document.getElementById("totalBalance").innerText = totalBalance.toFixed(2);
+}
+
+
+
+// ================= INVESTMENTS =================
+async function loadInvestments(){
+  const res = await fetch("/admin/api/investments", { credentials:"include" });
+  const data = await res.json();
+
+  document.getElementById("pendingInvestments").innerText = data.length;
+
+  const tbody = document.getElementById("investTable");
+  tbody.innerHTML = "";
+
+  data.forEach(i=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${i.user_id}</td>
+        <td>${i.username}</td>
+        <td>${i.plan}</td>
+        <td>$${i.amount}</td>
+        <td>
+          <button class="btn success" onclick="approveInvestment(${i.id})">Approve</button>
+          <button class="btn" onclick="openProfitModal(${i.user_id}, ${i.id})" title="Send 8% profit">💰 Profit</button>
+        </td>
+      </tr>`;
+  });
+}
+
+async function approveInvestment(id){
+  await fetch("/admin/api/investments/approve",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials:"include",
+    body:JSON.stringify({id})
+  });
+  loadInvestments();
+}
+
+function openProfitModal(userId, investId){
+  document.getElementById("profitUserId").value = userId;
+  document.getElementById("profitInvestId").value = investId;
+  document.getElementById("profitModal").style.display = "block";
+}
+
+function closeProfitModal(){
+  document.getElementById("profitModal").style.display = "none";
+}
+
+async function sendInvestmentProfit(){
+  const user_id = document.getElementById("profitUserId").value;
+  const investment_id = document.getElementById("profitInvestId").value;
+  const profit_amount = document.getElementById("profitAmount").value;
+  const crypto = document.getElementById("profitCrypto").value;
+
+  if (!profit_amount || profit_amount <= 0) {
+    alert("Enter valid profit amount");
+    return;
+  }
+
+  const res = await fetch("/admin/api/send-investment-profit", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials:"include",
+    body:JSON.stringify({user_id, investment_id, profit_amount, crypto})
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    alert("Error: " + data.error);
+    return;
+  }
+
+  alert(`Profit $${profit_amount} sent to user! Email notification sent.`);
+  closeProfitModal();
+  loadUsers();
+  loadInvestments();
+}
+async function deleteUser(userId, username) {
+  if (!confirm(`⚠️ PERMANENTLY DELETE user "${username}"?\n\nThis will delete:\n- Their account\n- All deposits\n- All withdrawals\n- All investments\n\nThis CANNOT be undone!`)) return;
+
+  // Double confirm for safety
+  const typed = prompt(`Type the username "${username}" to confirm deletion:`);
+  if (typed !== username) {
+    alert("Username did not match. Deletion cancelled.");
+    return;
+  }
+
+  const res = await fetch("/admin/api/delete-user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ user_id: userId })
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    alert(`✅ ${data.message}`);
+    loadUsers();
+  } else {
+    alert("❌ Error: " + (data.error || "Delete failed"));
+  }
+}
+// ================= DEPOSITS =================
+async function loadDeposits(){
+  const res = await fetch('/admin/api/deposits', { credentials:'include' });
+  if(!res.ok) return;
+  const data = await res.json();
+  const tbody = document.getElementById('depositTable');
+  tbody.innerHTML = '';
+  data.forEach(d=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${d.username}</td>
+        <td>$${d.amount}</td>
+        <td>${d.crypto}</td>
+        <td title="${d.tx_id}">${d.tx_id}</td>
+        <td><button class="btn success" onclick="approveDeposit(${d.id})">Approve</button></td>
+      </tr>`;
+  });
+}
+
+async function approveDeposit(id){
+  if(!confirm('Approve deposit #' + id + '?')) return;
+  const res = await fetch('/admin/api/deposits/approve',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    credentials:'include',
+    body: JSON.stringify({id})
+  });
+  const data = await res.json();
+  if(res.ok){ alert(data.message || 'Approved'); loadDeposits(); loadUsers(); }
+  else alert(data.error || 'Approve failed');
+}
+
+// ================= WITHDRAWALS =================
+async function loadWithdrawals(){
+  const res = await fetch("/admin/api/withdrawals", { credentials:"include" });
+  const data = await res.json();
+
+  document.getElementById("pendingWithdraws").innerText = data.length;
+
+  const tbody = document.getElementById("withdrawTable");
+  tbody.innerHTML = "";
+
+ data.forEach(w=>{
+    tbody.innerHTML += `
+      <tr>
+        <td>${w.username}</td>  // ✅ NOW SHOWS USERNAME
+        <td>${w.crypto}</td>
+        <td>$${w.amount}</td>
+        <td><button class="btn success" onclick="approveWithdrawal(${w.id})">Approve</button></td>
+      </tr>`;
+  });
+}
+
+async function approveWithdrawal(id){
+  await fetch("/admin/api/withdrawals/approve",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials:"include",
+    body:JSON.stringify({id})
+  });
+  loadWithdrawals();
+}
+
+// ================= BALANCE EDIT =================
+function openBalanceModal(userId){
+  document.getElementById("editUserId").value = userId;
+  document.getElementById("balanceModal").style.display = "block";
+}
+
+function closeBalanceModal(){
+  document.getElementById("balanceModal").style.display = "none";
+}
+function openRemoveModal(userId){
+  document.getElementById("removeUserId").value = userId;
+  document.getElementById("removeModal").style.display = "block";
+}
+
+function closeRemoveModal(){
+  document.getElementById("removeModal").style.display = "none";
+}
+
+async function removeBalance(){
+  const user_id = document.getElementById("removeUserId").value;
+  const coin = document.getElementById("removeCoin").value;
+  const amount = document.getElementById("removeAmount").value;
+
+  if (!amount || amount <= 0) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  const res = await fetch("/admin/api/remove-balance", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials:"include",
+    body:JSON.stringify({user_id, coin, amount})
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    alert(data.error);
+    return;
+  }
+
+  alert("Balance removed!");
+  closeRemoveModal();
+  loadUsers();
+}
+async function freezeWithdrawal(userId) {
+  if (!confirm("Freeze this user's withdrawals?")) return;
+  const res = await fetch("/admin/api/freeze-withdrawal", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    credentials: "include",
+    body: JSON.stringify({user_id: userId})
+  });
+  const data = await res.json();
+  alert(data.message || data.error);
+  loadUsers();
+}
+
+async function unfreezeWithdrawal(userId) {
+  if (!confirm("Unfreeze this user's withdrawals?")) return;
+  const res = await fetch("/admin/api/unfreeze-withdrawal", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    credentials: "include",
+    body: JSON.stringify({user_id: userId})
+  });
+  const data = await res.json();
+  alert(data.message || data.error);
+  loadUsers();
+}
+async function addBalance(){
+  const user_id = document.getElementById("editUserId").value;
+  const coin = document.getElementById("editCoin").value;
+  const amount = document.getElementById("editAmount").value;
+
+  if (!amount || amount <= 0) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  const res = await fetch("/admin/api/add-balance", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    credentials:"include",
+    body:JSON.stringify({user_id, coin, amount})
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    alert(data.error);
+    return;
+  }
+
+  alert("Balance updated!");
+  closeBalanceModal();
+  loadUsers();
+}
+
+// LOAD ALL
+loadUsers();
+loadInvestments();
+loadWithdrawals();
+loadDeposits();
+let adminChart;
+
+async function loadAdminChart(){
+  const res = await fetch("/admin/api/stats", { credentials:"include" });
+  const data = await res.json();
+
+  const ctx = document.getElementById("adminChart");
+
+  if(adminChart) adminChart.destroy();
+
+  adminChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: data.labels,
+      datasets: [
+        {
+          label: "Total Balance ($)",
+          data: data.balance,
+          borderColor: "#4c7cff",
+          tension: 0.3
+        },
+        {
+          label: "Users",
+          data: data.users,
+          borderColor: "#00ffa6",
+          tension: 0.3
+        }
+      ]
+    }
+  });
+}
+
+loadAdminChart();
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

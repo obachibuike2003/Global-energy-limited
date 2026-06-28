@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Withdrawal History - Global Energy</title>
+    <link rel="icon" href="https://globaleneegy.trade/assets/images/favicon.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1e0533 0%, #110a1f 50%, #0a0118 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.3);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Container */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats Card */
+        .stats-card {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #60A5FA 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(30, 58, 138, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .stats-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .stats-amount {
+            font-size: 36px;
+            font-weight: 800;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #DBEAFE;
+        }
+
+        /* Transaction Card */
+        .transaction-card {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.15) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .transaction-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .transaction-card:active::before {
+            left: 100%;
+        }
+
+        .transaction-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 5px 20px rgba(30, 58, 138, 0.3);
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .transaction-amount {
+            font-size: 22px;
+            font-weight: 700;
+            color: #60A5FA;
+            text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-approved {
+            background: linear-gradient(135deg, #10B981, #059669);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .status-rejected {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .crypto-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .crypto-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .crypto-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #DBEAFE;
+        }
+
+        .transaction-details {
+            font-size: 13px;
+            color: #93C5FD;
+            line-height: 1.6;
+        }
+
+        .tx-hash {
+            font-size: 11px;
+            color: #93C5FD;
+            word-break: break-all;
+            margin-top: 6px;
+            font-family: 'Courier New', monospace;
+            opacity: 0.8;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            display: none;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.4);
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #DBEAFE;
+        }
+
+        .empty-text {
+            color: #93C5FD;
+            margin-bottom: 25px;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #1E3A8A, #1E40AF);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .primary-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 5, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(30, 58, 138, 0.3);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #60A5FA;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: #3B82F6;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Loading */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1e0533 0%, #110a1f 50%, #0a0118 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(30, 58, 138, 0.2);
+            border-top-color: #1E3A8A;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="window.location='/account'">←</button>
+        <div class="header-title">Withdrawal History</div>
+        <div class="header-icon">💸</div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Stats Card -->
+        <div class="stats-card">
+            <div class="stats-label">Total Withdrawn</div>
+            <div class="stats-amount">$<span id="totalWithdrawn">0.00</span></div>
+        </div>
+
+        <!-- Section Title -->
+        <div class="section-title">Recent Transactions</div>
+
+        <!-- Transactions -->
+        <div id="transactionsList"></div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">📤</div>
+            <div class="empty-title">No Withdrawals Yet</div>
+            <div class="empty-text">Your withdrawal history will appear here</div>
+            <a href="/account" class="primary-btn">Go to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="/account" class="nav-item">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+        </a>
+        <a href="/transactions" class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Transactions</div>
+        </a>
+        <a href="/deposit" class="nav-item">
+            <div class="nav-icon">💎</div>
+            <div class="nav-label">Deposit</div>
+        </a>
+        <a href="https://wa.me/4407858634598" class="nav-item" target="_blank">
+            <div class="nav-icon">💬</div>
+            <div class="nav-label">Support</div>
+        </a>
+    </div>
+
+    <script>
+        const cryptoIcons = {
+            'btc': '/account/img/1000.gif',
+            'eth': '/account/img/1001.gif',
+            'usdt': '/account/img/1002.gif',
+            'bnb': '/account/img/1003.gif'
+        };
+
+        async function loadWithdrawals() {
+            try {
+                const res = await fetch("/api/withdrawal-history", { credentials: "include" });
+                
+                if (!res.ok) throw new Error("Failed to load");
+
+                const data = await res.json();
+                const list = document.getElementById("transactionsList");
+                const empty = document.getElementById("emptyState");
+                const loader = document.getElementById("loader");
+
+                loader.style.display = "none";
+
+                if (data.withdrawals.length === 0) {
+                    empty.style.display = "block";
+                    return;
+                }
+
+                let total = 0;
+                list.innerHTML = "";
+
+                data.withdrawals.forEach(w => {
+                    total += w.amount;
+                    
+                    const statusClass = `status-${w.status}`;
+                    const date = new Date(w.created_at).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    list.innerHTML += `
+                        <div class="transaction-card">
+                            <div class="transaction-header">
+                                <div class="transaction-amount">-$${w.amount.toFixed(2)}</div>
+                                <span class="status-badge ${statusClass}">${w.status}</span>
+                            </div>
+                            <div class="crypto-info">
+                                <img src="${cryptoIcons[w.crypto] || cryptoIcons.usdt}" class="crypto-icon">
+                                <span class="crypto-name">${w.crypto.toUpperCase()}</span>
+                            </div>
+                            <div class="transaction-details">
+                                📅 ${date}
+                                ${w.tx_hash ? `<div class="tx-hash">TX: ${w.tx_hash}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById("totalWithdrawn").textContent = total.toFixed(2);
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("emptyState").style.display = "block";
+            }
+        }
+
+        loadWithdrawals();
+    </script>
+</body>
+</html>

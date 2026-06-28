@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Start Investment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0b0f14;
+  --card: #0f1624;
+  --border: #1f2937;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --blue: #0a84ff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #0f172a, var(--bg));
+  color: var(--text);
+}
+
+/* HEADER */
+.header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  border-bottom: 1px solid var(--border);
+}
+.copy-btn {
+  margin-top: 10px;
+  width: 100%;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #020617;
+  color: var(--blue);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  border-color: var(--blue);
+}
+
+
+.header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue);
+  letter-spacing: 0.2px;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 24px 16px 120px;
+}
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.hidden { display: none; }
+
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(180deg, #111827, #020617);
+  border-radius: 22px;
+  padding: 24px;
+  border: 1px solid var(--border);
+}
+
+.modal-box h3 {
+  text-align: center;
+  color: var(--blue);
+  margin-bottom: 14px;
+}
+
+.modal-box button {
+  width: 100%;
+  height: 46px;
+  margin-top: 10px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(90deg, #0a84ff, #2563eb);
+  color: #fff;
+  font-weight: 600;
+}
+
+.modal-box input {
+  width: 100%;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #020617;
+  color: white;
+  padding: 0 12px;
+}
+
+.wallet {
+  background: #020617;
+  border-radius: 14px;
+  padding: 14px;
+  word-break: break-all;
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+.note {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+
+/* GRID */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.plan {
+  background: linear-gradient(180deg, #111827, #0b1220);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px;
+  transition: all 0.25s ease;
+}
+
+.plan:hover {
+  transform: translateY(-4px);
+  border-color: rgba(10,132,255,0.5);
+}
+
+.plan.recommended {
+  border-color: var(--blue);
+  box-shadow: 0 10px 40px rgba(10,132,255,0.15);
+}
+
+.plan h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.plan p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* BUTTON */
+.plan button {
+  margin-top: 18px;
+  width: 100%;
+  height: 46px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(90deg, #0a84ff, #2563eb);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+}
+
+/* PROCEED */
+.proceed {
+  position: fixed;
+  bottom: 64px;
+  left: 0;
+  width: 100%;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, transparent, #000);
+}
+
+.proceed button {
+  max-width: 1100px;
+  margin: auto;
+  display: block;
+  width: 100%;
+  height: 50px;
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(90deg, #0a84ff, #2563eb);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+/* BOTTOM NAV */
+.nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #000;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+.nav span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.nav .active {
+  color: var(--blue);
+}
+</style>
+</head>
+<!-- PAYMENT MODAL -->
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+
+    <!-- STEP 1 -->
+    <div id="step1">
+      <h3>Select Payment Gateway</h3>
+      <button onclick="choose('BTC')">Bitcoin</button>
+      <button onclick="choose('ETH')">Ethereum</button>
+      <button onclick="choose('BNB')">BNB</button>
+      <button onclick="choose('USDT')">USDT (TRC20)</button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="hidden">
+      <h3 id="gatewayTitle"></h3>
+      <input type="number" id="amount" placeholder="Enter amount (USD)">
+      <button onclick="pay()">Pay</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="hidden">
+      <h3>Send Payment</h3>
+      <p><b>Network:</b> <span id="network"></span></p>
+      <p><b>Amount:</b> $<span id="finalAmount"></span></p>
+      
+
+
+      <div class="wallet">
+  <span id="address"></span>
+  <button class="copy-btn" onclick="copyAddress()">Copy Address</button>
+</div>
+
+<p><b>You will send:</b> <span id="cryptoAmount"></span></p>
+
+<p class="note">⚠ Send only the selected crypto to this address</p>
+
+
+      <button onclick="closeModal()">Done</button>
+    </div>
+
+  </div>
+</div>
+
+
+<body>
+
+<div class="header">
+  <h1>Start Investment</h1>
+</div>
+
+<div class="container">
+
+  <div class="plans">
+
+    <div class="plan">
+      <h2>8% profit after 24 hours</h2>
+      <p>Minimum — $50</p>
+      <p>Maximum — $499</p>
+      <p>Duration — 24 hours</p>
+      <button onclick="selectPlan(1)">Select Plan</button>
+    </div>
+
+    <div class="plan recommended">
+      <h2>16% profit after 24 hours</h2>
+      <p>Minimum — $500</p>
+      <p>Maximum — $6,999</p>
+      <p>Duration — 24 hours</p>
+      <button onclick="selectPlan(2)">Select Plan</button>
+    </div>
+
+    <div class="plan">
+      <h2>33% profit after 48 hours</h2>
+      <p>Minimum — $7,000</p>
+      <p>Maximum — Unlimited</p>
+      <p>Duration — 48 hours</p>
+      <button onclick="selectPlan(3)">Select Plan</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="proceed">
+  <button onclick="proceed()">Proceed</button>
+</div>
+
+<div class="nav">
+  <span>Dashboard</span>
+  <span>Transactions</span>
+  <span class="active">Plans</span>
+  <span>Support</span>
+</div>
+
+
+
+<script>
+let prices = {
+  BTC: null,
+  ETH: null,
+  BNB: null,
+  USDT: 1
+};
+
+// Wallet addresses will be loaded from database
+const wallets = {
+  BTC: { name: "Bitcoin", symbol: "BTC", address: "" },
+  ETH: { name: "Ethereum (ERC20)", symbol: "ETH", address: "" },
+  BNB: { name: "BNB Smart Chain", symbol: "BNB", address: "" },
+  USDT:{ name: "USDT (TRC20)", symbol: "USDT", address: "" }
+};
+
+// Load user wallet addresses from database
+async function loadWalletAddresses() {
+  try {
+    const res = await fetch('/dashboard/me', { credentials: 'include' });
+    if (!res.ok) {
+      console.error('Failed to load wallet addresses');
+      return;
+    }
+    const data = await res.json();
+    
+    // Use fixed company wallet addresses (unchangeable)
+    wallets.BTC.address = "bc1qvlp57rkah6rxz7672fekk57w7y7ecwqy6duhgc";
+    wallets.ETH.address = "0xce8b66d28ec792ecb44a72087d6bbcbbeebe7bff";
+    wallets.BNB.address = "0xce8b66d28ec792ecb44a72087d6bbcbbeebe7bff";
+    wallets.USDT.address = "TGmZxR8f9r8gq1bmHqbKdY5MkB7wEw8TBA";
+    
+    console.log("Wallet addresses loaded:", wallets);
+  } catch (err) {
+    console.error('Error loading wallet addresses:', err);
+  }
+}
+
+// Load addresses on page load
+loadWalletAddresses();
+
+async function fetchPrices() {
+  try {
+    const res = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,tether&vs_currencies=usd"
+    );
+    const data = await res.json();
+
+    prices.BTC = data.bitcoin.usd;
+    prices.ETH = data.ethereum.usd;
+    prices.BNB = data.binancecoin.usd;
+    prices.USDT = data.tether.usd;
+
+    console.log("Live prices loaded:", prices);
+  } catch (err) {
+    console.error("Price fetch failed, using fallback", err);
+    prices = { BTC: 68000, ETH: 3200, BNB: 420, USDT: 1 };
+  }
+}
+
+/* Load prices when page opens */
+fetchPrices();
+
+let countdownInterval;
+
+
+function selectPlan(p) {
+  selected = p;
+  document.querySelectorAll('.plan').forEach(card => card.classList.remove('recommended'));
+  document.querySelectorAll('.plan')[p - 1].classList.add('recommended');
+}
+
+function proceed() {
+  if (!selected) {
+    alert("Please select a plan first");
+    return;
+  }
+  document.getElementById("modal").classList.remove("hidden");
+}
+
+function choose(g) {
+  gateway = g;
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("step2").classList.remove("hidden");
+  document.getElementById("gatewayTitle").innerText = "Pay with " + wallets[g].name;
+}
+
+
+function pay() {
+  const usd = Number(document.getElementById("amount").value);
+  if (!usd || usd <= 0) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  if (!prices[gateway]) {
+    alert("Price still loading, please wait...");
+    return;
+  }
+
+  const crypto = (usd / prices[gateway]).toFixed(6);
+
+  document.getElementById("step2").classList.add("hidden");
+  document.getElementById("step3").classList.remove("hidden");
+
+  document.getElementById("network").innerText = wallets[gateway].name;
+  document.getElementById("finalAmount").innerText = usd;
+  document.getElementById("address").innerText = wallets[gateway].address;
+  document.getElementById("cryptoAmount").innerText =
+    crypto + " " + wallets[gateway].symbol;
+
+  // START 15 MINUTE TIMER
+  startTimer(15);
+}
+
+
+
+  document.getElementById("step2").classList.add("hidden");
+  document.getElementById("step3").classList.remove("hidden");
+
+  document.getElementById("network").innerText = wallets[gateway].name;
+  document.getElementById("finalAmount").innerText = usd;
+  document.getElementById("address").innerText = wallets[gateway].address;
+  document.getElementById("cryptoAmount").innerText =
+    crypto + " " + wallets[gateway].symbol;
+
+
+function copyAddress() {
+  const text = document.getElementById("address").innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Wallet address copied!");
+  });
+}
+
+async function closeModal() {
+  clearInterval(countdownInterval);
+  
+  const usd = Number(document.getElementById("finalAmount").innerText);
+  
+  // Send deposit to backend
+  try {
+    const response = await fetch('/api/deposit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        amount: usd,
+        crypto: gateway.toLowerCase()
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      alert("Deposit submitted! Processing email sent to your inbox.");
+    } else {
+      alert("Error: " + (data.error || "Failed to submit deposit"));
+    }
+  } catch (err) {
+    console.error('Error submitting deposit:', err);
+    alert("Error submitting deposit: " + err.message);
+  }
+  
+  // Close modal
+  document.getElementById("modal").classList.add("hidden");
+  document.getElementById("step1").classList.remove("hidden");
+  document.getElementById("step2").classList.add("hidden");
+  document.getElementById("step3").classList.add("hidden");
+  document.getElementById("amount").value = "";
+}
+
+</script>
+
+<script>
+
+</script>
+
+
+</body>
+</html>

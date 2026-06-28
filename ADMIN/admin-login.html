@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* =====================
+   RESET + VARIABLES
+===================== */
+:root{
+  --bg1:#0f2027;
+  --bg2:#203a43;
+  --bg3:#2c5364;
+  --accent:#3fa9f5;
+  --glass:rgba(255,255,255,.12);
+  --border:rgba(255,255,255,.25);
+  --error:#ff4d4d;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Inter,Segoe UI,system-ui,sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+  color:#fff;
+  overflow:hidden;
+}
+
+/* =====================
+   BACKGROUND ANIMATION
+===================== */
+.bg-orb{
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle,var(--accent),transparent 70%);
+  filter:blur(120px);
+  animation:float 12s infinite alternate ease-in-out;
+}
+.bg-orb.one{top:-120px;left:-120px}
+.bg-orb.two{bottom:-120px;right:-120px}
+
+@keyframes float{
+  from{transform:translateY(0)}
+  to{transform:translateY(60px)}
+}
+
+/* =====================
+   LOGIN CARD
+===================== */
+.login-box{
+  position:relative;
+  z-index:2;
+  width:360px;
+  padding:40px 35px;
+  background:var(--glass);
+  backdrop-filter:blur(22px);
+  border-radius:22px;
+  border:1px solid var(--border);
+  box-shadow:0 30px 60px rgba(0,0,0,.4);
+  animation:enter .8s ease;
+}
+
+@keyframes enter{
+  from{opacity:0;transform:translateY(25px) scale(.95)}
+  to{opacity:1;transform:none}
+}
+
+.login-box h2{
+  text-align:center;
+  font-size:26px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.login-box p{
+  text-align:center;
+  opacity:.8;
+  margin-bottom:30px;
+}
+
+/* =====================
+   INPUTS
+===================== */
+.field{
+  margin-bottom:18px;
+}
+
+.field input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,.25);
+  color:#fff;
+  outline:none;
+  font-size:14px;
+  transition:.25s;
+}
+
+.field input::placeholder{color:#ccc}
+
+.field input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(63,169,245,.25);
+}
+
+/* =====================
+   BUTTON
+===================== */
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  font-size:15px;
+  font-weight:600;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),#6dd5fa);
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 30px rgba(63,169,245,.45);
+}
+
+/* =====================
+   ERROR
+===================== */
+.error{
+  display:none;
+  text-align:center;
+  margin-top:14px;
+  color:var(--error);
+  font-size:13px;
+}
+
+/* =====================
+   FOOTER
+===================== */
+.footer{
+  text-align:center;
+  margin-top:25px;
+  font-size:12px;
+  opacity:.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-orb one"></div>
+<div class="bg-orb two"></div>
+
+<div class="login-box">
+  <h2>Admin Access</h2>
+  <p>Secure administrator login</p>
+
+  <form id="loginForm">
+    <div class="field">
+      <input name="username" placeholder="Admin Username" required>
+    </div>
+
+    <div class="field">
+      <input name="password" type="password" placeholder="Password" required>
+    </div>
+
+    <button>Login</button>
+    <div class="error" id="error">Invalid credentials</div>
+  </form>
+
+  <div class="footer">
+    © Secure Admin Panel
+  </div>
+</div>
+
+<script>
+document.getElementById("loginForm").onsubmit = async (e)=>{
+  e.preventDefault();
+
+  const res = await fetch("/api/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      username:e.target.username.value,
+      password:e.target.password.value
+    })
+  });
+
+  if(res.ok){
+    window.location.href="/admin";
+  }else{
+    document.getElementById("error").style.display="block";
+  }
+};
+</script>
+
+</body>
+</html>
