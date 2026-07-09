@@ -730,6 +730,28 @@ def deposit_history_page():
 def ping():
     return "ok", 200
 
+@app.route("/test-email")
+def test_email():
+    import traceback
+    config_info = {
+        "MAIL_SERVER": app.config.get("MAIL_SERVER"),
+        "MAIL_PORT": app.config.get("MAIL_PORT"),
+        "MAIL_USE_TLS": app.config.get("MAIL_USE_TLS"),
+        "MAIL_USERNAME": app.config.get("MAIL_USERNAME"),
+        "MAIL_PASSWORD_SET": bool(app.config.get("MAIL_PASSWORD")),
+        "MAIL_DEFAULT_SENDER": app.config.get("MAIL_DEFAULT_SENDER"),
+    }
+    try:
+        msg = Message(
+            subject="Test Email from Global Energy",
+            recipients=[app.config.get("MAIL_USERNAME")],
+            body="This is a test email to confirm mail is working."
+        )
+        mail.send(msg)
+        return jsonify({"status": "success", "config": config_info}), 200
+    except Exception as e:
+        return jsonify({"status": "failed", "error": str(e), "config": config_info}), 500
+
 @app.route("/")
 def home():
     return send_from_directory("scraped_site", "Home.html")
