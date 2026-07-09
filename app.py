@@ -5,7 +5,7 @@ import secrets
 from flask import session
 from functools import wraps
 from werkzeug.middleware.proxy_fix import ProxyFix
-import resend
+import requests as http_requests
 import random, string
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -36,17 +36,28 @@ if database_url.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-resend.api_key = os.getenv("RESEND_API_KEY")
-MAIL_FROM = os.getenv("MAIL_FROM", "Global Energy <onboarding@resend.dev>")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+MAIL_FROM_EMAIL = os.getenv("MAIL_FROM_EMAIL", "globalenergylimted@gmail.com")
+MAIL_FROM_NAME = os.getenv("MAIL_FROM_NAME", "Global Energy")
 
 def send_email(to, subject, html_body):
     try:
-        resend.Emails.send({
-            "from": MAIL_FROM,
-            "to": [to],
-            "subject": subject,
-            "html": html_body,
-        })
+        response = http_requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "api-key": BREVO_API_KEY,
+                "Content-Type": "application/json",
+            },
+            json={
+                "sender": {"name": MAIL_FROM_NAME, "email": MAIL_FROM_EMAIL},
+                "to": [{"email": to}],
+                "subject": subject,
+                "htmlContent": html_body,
+            },
+            timeout=10
+        )
+        if response.status_code not in (200, 201):
+            print("Brevo error:", response.text)
     except Exception as e:
         print("Email error:", e)
 
@@ -705,8 +716,8 @@ def ping():
 @app.route("/test-email")
 def test_email():
     config_info = {
-        "RESEND_API_KEY_SET": bool(os.getenv("RESEND_API_KEY")),
-        "MAIL_FROM": MAIL_FROM,
+        "BREVO_API_KEY_SET": bool(BREVO_API_KEY),
+        "MAIL_FROM_EMAIL": MAIL_FROM_EMAIL,
     }
     try:
         send_email(
