@@ -726,6 +726,10 @@ def deposit_history_page():
         return redirect("/login")
     return send_from_directory("ACCOUNT", "deposit-history.html")
 
+@app.route("/ping")
+def ping():
+    return "ok", 200
+
 @app.route("/")
 def home():
     return send_from_directory("scraped_site", "Home.html")
