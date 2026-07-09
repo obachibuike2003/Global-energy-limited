@@ -867,6 +867,10 @@ def register():
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "Username already exists"}), 400
 
+    # Check email
+    if User.query.filter_by(email=email).first():
+        return jsonify({"error": "Email already registered"}), 400
+
     # Create new user
     user = User(username=username, email=email, referral_code=generate_ref_code())
     user.set_password(password)
@@ -879,7 +883,11 @@ def register():
             user.referred_by = ref_code
 
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        return jsonify({"error": "Registration failed. Please try again."}), 500
 
     # Send welcome email to new user
     try:
