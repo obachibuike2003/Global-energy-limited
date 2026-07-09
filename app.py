@@ -5,7 +5,7 @@ import secrets
 from flask import session
 from functools import wraps
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask_mail import Mail, Message
+import resend
 import random, string
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -30,16 +30,25 @@ def generate_ref_code():
 # -------------------
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+database_url = os.getenv("DATABASE_URL", "sqlite:///database.db")
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
 
-mail = Mail(app)
+resend.api_key = os.getenv("RESEND_API_KEY")
+MAIL_FROM = os.getenv("MAIL_FROM", "Global Energy <onboarding@resend.dev>")
+
+def send_email(to, subject, html_body):
+    try:
+        resend.Emails.send({
+            "from": MAIL_FROM,
+            "to": [to],
+            "subject": subject,
+            "html": html_body,
+        })
+    except Exception as e:
+        print("Email error:", e)
 
 db = SQLAlchemy(app)
 
@@ -144,13 +153,6 @@ class User(db.Model):
         if not self.mpassword_hash:
             return False
         return check_password_hash(self.mpassword_hash, mpassword)
-    def send_email(to, subject, body):
-     try:
-        msg = Message(subject, recipients=[to])
-        msg.body = body
-        mail.send(msg)
-     except Exception as e:
-        print("EMAIL ERROR:", e)
 
 with app.app_context():
     db.create_all()
@@ -195,12 +197,7 @@ def send_welcome_email(email, username):
         </html>
         """
 
-        msg = Message(
-            subject="Welcome to Global Energy",
-            recipients=[email],
-        )
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Welcome to Global Energy", html_body)
 
         print("Welcome email sent to:", email)
 
@@ -261,12 +258,7 @@ def send_referral_signup_email(referrer_email, referrer_username, new_username, 
         </html>
         """
 
-        msg = Message(
-            subject="🎉 New Referral Signup - Global Energy",
-            recipients=[referrer_email],
-        )
-        msg.html = html_body
-        mail.send(msg)
+        send_email(referrer_email, "🎉 New Referral Signup - Global Energy", html_body)
 
         print(f"[REFERRAL] Signup notification sent to {referrer_username} ({referrer_email}) for new user {new_username}")
 
@@ -323,12 +315,7 @@ def send_credit_email(email, username, coin, amount, user_wallet_address, compan
         </html>
         """
 
-        msg = Message(
-            subject="Credit Alert - Global Energy",
-            recipients=[email],
-        )
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Credit Alert - Global Energy", html_body)
 
         print("Credit alert sent:", email)
 
@@ -388,12 +375,7 @@ def send_referral_commission_email(email, username, coin, amount, user_wallet_ad
             </html>
             """
 
-            msg = Message(
-                subject="Referral Commission - Global Energy",
-                recipients=[email],
-            )
-            msg.html = html_body
-            mail.send(msg)
+            send_email(email, "Referral Commission - Global Energy", html_body)
 
             print("Referral commission email sent:", email)
 
@@ -447,9 +429,7 @@ def send_withdraw_request_email(email, username, coin, amount, tx_id=None):
         </html>
         """
 
-        msg = Message("Withdrawal Request Submitted", recipients=[email])
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Withdrawal Request Submitted", html_body)
 
     except Exception as e:
         print("EMAIL ERROR:", e)
@@ -504,9 +484,7 @@ def send_withdraw_processing_email(email, username, coin, amount, tx_id=None):
         </html>
         """
 
-        msg = Message("Withdrawal Processing - Global Energy", recipients=[email])
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Withdrawal Processing - Global Energy", html_body)
 
         print("Processing email sent:", email)
 
@@ -561,9 +539,7 @@ def send_investment_received_email(email, username, coin, amount_usd, crypto_amo
         </html>
         """
 
-        msg = Message("Investment Received - Global Energy", recipients=[email])
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Investment Received - Global Energy", html_body)
 
         print("Investment received email sent:", email)
 
@@ -614,9 +590,7 @@ def send_investment_approved_email(email, username, coin, amount_usd, crypto_amo
         </html>
         """
 
-        msg = Message("Investment Approved - Global Energy", recipients=[email])
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Investment Approved - Global Energy", html_body)
 
         print("Investment approved email sent:", email)
 
@@ -645,9 +619,7 @@ def send_investment_profit_email(email, username, coin, profit_amount_usd, inv_i
         </html>
         """
 
-        msg = Message("Investment Payout - Global Energy", recipients=[email])
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Investment Payout - Global Energy", html_body)
 
         print("Investment payout email sent:", email)
 
@@ -732,22 +704,16 @@ def ping():
 
 @app.route("/test-email")
 def test_email():
-    import traceback
     config_info = {
-        "MAIL_SERVER": app.config.get("MAIL_SERVER"),
-        "MAIL_PORT": app.config.get("MAIL_PORT"),
-        "MAIL_USE_TLS": app.config.get("MAIL_USE_TLS"),
-        "MAIL_USERNAME": app.config.get("MAIL_USERNAME"),
-        "MAIL_PASSWORD_SET": bool(app.config.get("MAIL_PASSWORD")),
-        "MAIL_DEFAULT_SENDER": app.config.get("MAIL_DEFAULT_SENDER"),
+        "RESEND_API_KEY_SET": bool(os.getenv("RESEND_API_KEY")),
+        "MAIL_FROM": MAIL_FROM,
     }
     try:
-        msg = Message(
-            subject="Test Email from Global Energy",
-            recipients=[app.config.get("MAIL_USERNAME")],
-            body="This is a test email to confirm mail is working."
+        send_email(
+            os.getenv("TEST_EMAIL", "obadiegwucyprian@gmail.com"),
+            "Test Email from Global Energy",
+            "<p>This is a test email to confirm Resend is working.</p>"
         )
-        mail.send(msg)
         return jsonify({"status": "success", "config": config_info}), 200
     except Exception as e:
         return jsonify({"status": "failed", "error": str(e), "config": config_info}), 500
@@ -1430,12 +1396,7 @@ def send_withdrawal_approved_email(email, username, coin, amount, user_wallet_ad
         </html>
         """
 
-        msg = Message(
-            subject="Withdrawal Completed - Global Energy",
-            recipients=[email],
-        )
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Withdrawal Completed - Global Energy", html_body)
 
         print("Withdrawal approval sent:", email)
 
@@ -1493,9 +1454,7 @@ def send_deposit_processing_email(email, username, coin, amount, company_wallet_
         </html>
         """
 
-        msg = Message("Deposit Processing - Global Energy", recipients=[email])
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Deposit Processing - Global Energy", html_body)
 
         print("Deposit processing email sent:", email)
 
@@ -1895,8 +1854,7 @@ def invest():
     # Notify manager of new investment
     try:
         manager_email = "katoevelyn220@gmail.com"
-        msg = Message("🔔 New Investment Alert - Global Energy", recipients=[manager_email])
-        msg.html = f"""
+        manager_html = f"""
         <!DOCTYPE html>
         <html>
         <body style="font-family:Arial;background:#1a1a2e;padding:20px;margin:0;">
@@ -1943,7 +1901,7 @@ def invest():
         </body>
         </html>
         """
-        mail.send(msg)
+        send_email(manager_email, "🔔 New Investment Alert - Global Energy", manager_html)
         print(f"[MANAGER] Investment alert sent to {manager_email}")
     except Exception as e:
         print(f"[MANAGER] Failed to send manager alert: {e}")
@@ -2116,12 +2074,7 @@ def send_recovery_code_email(email, username, code):
         </html>
         """
 
-        msg = Message(
-            subject="Password Recovery Code - Global Energy",
-            recipients=[email],
-        )
-        msg.html = html_body
-        mail.send(msg)
+        send_email(email, "Password Recovery Code - Global Energy", html_body)
 
         print("Recovery code sent to:", email)
 
