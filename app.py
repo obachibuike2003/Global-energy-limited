@@ -175,7 +175,7 @@ def send_welcome_email(email, username):
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Welcome to Global Energy</p>
@@ -190,7 +190,7 @@ def send_welcome_email(email, username):
 
             <p>Best regards,<br>
             <b>Global Energy Team</b><br>
-            https://globalenergy.trade</p>
+            https://global-energy-limited.onrender.com</p>
 
         </div>
         </body>
@@ -214,7 +214,7 @@ def send_referral_signup_email(referrer_email, referrer_username, new_username, 
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">🎉 New Referral Signup!</p>
@@ -250,7 +250,7 @@ def send_referral_signup_email(referrer_email, referrer_username, new_username, 
             <p style="color:#888;font-size:13px;margin-top:25px;">
                 Keep referring users to earn more commissions!<br>
                 <b>Global Energy Team</b><br>
-                https://globalenergy.trade
+                https://global-energy-limited.onrender.com
             </p>
 
         </div>
@@ -274,7 +274,7 @@ def send_credit_email(email, username, coin, amount, user_wallet_address, compan
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Hello {username},</p>
@@ -330,7 +330,7 @@ def send_referral_commission_email(email, username, coin, amount, user_wallet_ad
             <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
                 <div style="text-align:center;margin-bottom:20px;">
-                    <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                    <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
                 </div>
 
                 <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Referral Commission Received</p>
@@ -390,7 +390,7 @@ def send_withdraw_request_email(email, username, coin, amount, tx_id=None):
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Withdrawal Request Received</p>
@@ -442,7 +442,7 @@ def send_withdraw_processing_email(email, username, coin, amount, tx_id=None):
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Withdrawal Processing</p>
@@ -500,7 +500,7 @@ def send_investment_received_email(email, username, coin, amount_usd, crypto_amo
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Investment Received</p>
@@ -555,7 +555,7 @@ def send_investment_approved_email(email, username, coin, amount_usd, crypto_amo
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Investment Approved</p>
@@ -605,7 +605,7 @@ def send_investment_profit_email(email, username, coin, profit_amount_usd, inv_i
         <body style="font-family:Arial;background:#1a1a2e;padding:20px;margin:0;">
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Investment Payout Received</p>
             <p style="color:#eee;font-size:15px;line-height:1.6;">Hello <b style="color:#00ff88;">{username}</b>,</p>
@@ -663,7 +663,7 @@ def get_referrals():
 
     return jsonify({
         "referral_code": user.referral_code,
-        "referral_link": f"https://globalenergy.trade/signup?ref={user.username}",
+        "referral_link": f"https://global-energy-limited.onrender.com/signup?ref={user.username}",
         "total_referral_earnings": user.referral_earnings or 0.0,
         "referrals": [
             {
@@ -1345,7 +1345,7 @@ def send_withdrawal_approved_email(email, username, coin, amount, user_wallet_ad
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Withdrawal Completed ✅</p>
@@ -1388,7 +1388,7 @@ def send_withdrawal_approved_email(email, username, coin, amount, user_wallet_ad
 
             <p style="color:#888;font-size:13px;margin-top:25px;">
                 <b style="color:#00ff88;">Global Energy Team</b><br>
-                https://globalenergy.trade
+                https://global-energy-limited.onrender.com
             </p>
 
         </div>
@@ -1412,7 +1412,7 @@ def send_deposit_processing_email(email, username, coin, amount, company_wallet_
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Deposit Received</p>
@@ -1861,7 +1861,7 @@ def invest():
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
 
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">🔔 New Investment Alert</p>
@@ -1894,7 +1894,7 @@ def invest():
 
             <p style="color:#888;font-size:13px;margin-top:25px;">
                 <b>Global Energy Platform</b><br>
-                https://globalenergy.trade
+                https://global-energy-limited.onrender.com
             </p>
 
         </div>
@@ -2038,7 +2038,7 @@ def send_recovery_code_email(email, username, code):
         <div style="max-width:600px;margin:auto;background:#16213e;padding:25px;border-radius:12px;border:1px solid #0f3460;">
             
             <div style="text-align:center;margin-bottom:20px;">
-                <img src="https://globalenergy.trade/signup/img/admin-ajax-2.png" width="120">
+                <img src="https://global-energy-limited.onrender.com/signup/img/admin-ajax-2.png" width="120">
             </div>
 
             <p style="color:#e94560;font-size:18px;font-weight:600;margin:0 0 20px 0;">Password Recovery Code</p>
@@ -2066,7 +2066,7 @@ def send_recovery_code_email(email, username, code):
 
             <p style="color:#888;font-size:13px;margin-top:25px;">
                 <b style="color:#00ff88;">Global Energy Team</b><br>
-                https://globalenergy.trade
+                https://global-energy-limited.onrender.com
             </p>
 
         </div>
